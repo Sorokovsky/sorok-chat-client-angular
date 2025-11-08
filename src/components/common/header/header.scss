@@ -10,5 +10,9 @@
     padding: 10px 15px;
     max-width: 1600px;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
   }
 }

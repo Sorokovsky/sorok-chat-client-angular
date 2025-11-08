@@ -1,0 +1,39 @@
+:host {
+  display: contents;
+}
+
+.burger {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &-line {
+    display: block;
+    width: 30px;
+    height: 2px;
+    background-color: var(--primary-text-color);
+    transform-origin: center;
+    transition: .5s all ease;
+
+    &:not(:last-child) {
+      margin-bottom: 7px;
+    }
+  }
+
+  &.active {
+    .burger-line {
+      &:nth-child(2) {
+        transform: scale(0);
+      }
+
+      &:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      &:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -8px);
+      }
+    }
+  }
+}
