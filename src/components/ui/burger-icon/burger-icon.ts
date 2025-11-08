@@ -1,4 +1,4 @@
-import {Component, signal, type WritableSignal} from '@angular/core';
+import {Component, EventEmitter, input, type InputSignal, Output} from '@angular/core';
 
 @Component({
   selector: 'app-burger-icon',
@@ -7,9 +7,12 @@ import {Component, signal, type WritableSignal} from '@angular/core';
   styleUrl: './burger-icon.scss',
 })
 export class BurgerIcon {
-  protected isActive: WritableSignal<boolean> = signal<boolean>(false);
 
-  public onClick() {
-    this.isActive.set(!this.isActive());
+  public isOpen: InputSignal<boolean> = input<boolean>(false);
+
+  @Output() public clicked: EventEmitter<void> = new EventEmitter<void>();
+
+  protected onClick() {
+    this.clicked.emit();
   }
 }
