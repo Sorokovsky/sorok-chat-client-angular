@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import type {LoginUser} from '@/schemes/login-user.schema';
 import {LOGIN_URL} from '@/constants/backend-api.constants';
 import {type User, UserSchema} from '@/schemes/user.schema';
-import {catchError, map, throwError} from 'rxjs';
+import {catchError, map, Observable, throwError} from 'rxjs';
 import {ZodError} from 'zod';
 
 @Injectable({
@@ -12,7 +12,7 @@ import {ZodError} from 'zod';
 export class AuthorizationService {
   private readonly httpClient: HttpClient = inject(HttpClient);
 
-  public register(loginDto: LoginUser) {
+  public register(loginDto: LoginUser): Observable<User> {
     return this.httpClient.post(LOGIN_URL, loginDto)
       .pipe(
         map((response: unknown): User => UserSchema.parse(response)),
