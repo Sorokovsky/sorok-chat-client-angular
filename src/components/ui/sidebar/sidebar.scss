@@ -1,8 +1,25 @@
+:host {
+  display: contents;
+}
+
 .sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
   min-width: 250px;
-  height: 100%;
+  background: #ffffff;
+  transition: .5s all ease;
 
   &-left {
     border-right: 1px solid grey;
+    transform: translateX(-100%)
+  }
+
+  &-right {
+    border-left: 1px solid grey;
+    transform: translateX(100%);
+  }
+
+  &.open {
+    transform: translateX(0);
   }
 }

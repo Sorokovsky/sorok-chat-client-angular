@@ -1,0 +1,14 @@
+:host {
+  display: contents;
+}
+
+.header {
+  background-color: var(--primary-background-color);
+  color: var(--primary-text-color);
+
+  &__container {
+    padding: 10px 15px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
