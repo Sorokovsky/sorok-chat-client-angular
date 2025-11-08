@@ -1,8 +1,11 @@
 import {Component} from '@angular/core';
+import {ChatsSidebar} from '@/components/common/chats-sidebar/chats-sidebar';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [],
+  imports: [
+    ChatsSidebar
+  ],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss',
 })
