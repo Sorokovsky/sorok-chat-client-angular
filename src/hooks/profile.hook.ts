@@ -11,6 +11,7 @@ export const useProfile = () => {
     queryKey: [PROFILE_KEY],
     queryFn: async (): Promise<User> => {
       return await lastValueFrom(authorizationService.getProfile());
-    }
+    },
+    retry: 0
   }))
 }
