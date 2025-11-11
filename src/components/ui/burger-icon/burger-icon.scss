@@ -7,6 +7,12 @@
   border: none;
   outline: none;
   cursor: pointer;
+  opacity: .5;
+  transition: opacity .3s;
+
+  &:hover {
+    opacity: 1;
+  }
 
   &-line {
     display: block;
@@ -14,7 +20,7 @@
     height: 2px;
     background-color: var(--primary-text-color);
     transform-origin: center;
-    transition: .5s all ease;
+    transition: .5s transform ease;
 
     &:not(:last-child) {
       margin-bottom: 7px;
