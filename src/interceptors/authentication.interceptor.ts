@@ -9,13 +9,16 @@ import {
 import {type Observable, tap} from "rxjs";
 import {AccessTokenStorageService} from '@/services/access-token-storage.service';
 
-export const authenticationInterceptor: HttpInterceptorFn = (request: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
-  const accessTokenStorageService = inject(AccessTokenStorageService);
+export const authenticationInterceptor: HttpInterceptorFn = (
+  request: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
+  const accessTokenStorageService: AccessTokenStorageService = inject(AccessTokenStorageService);
   const accessToken: string = accessTokenStorageService.getTokenFromLocalStorage();
   const modifiedRequest: HttpRequest<unknown> = accessTokenStorageService.setTokenToRequest(accessToken, request);
   return next(modifiedRequest)
     .pipe(
-      tap(event => {
+      tap((event: HttpEvent<unknown>): void => {
         if (event instanceof HttpResponse) {
           const newAccessToken: string = accessTokenStorageService.getTokenFromResponse(event);
           accessTokenStorageService.setTokenToLocalStorage(newAccessToken);
