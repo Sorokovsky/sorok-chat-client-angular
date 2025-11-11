@@ -6,8 +6,10 @@ import {
   type HttpRequest,
   HttpResponse
 } from '@angular/common/http';
-import {type Observable, tap} from "rxjs";
+import {catchError, type Observable, tap, throwError} from "rxjs";
 import {AccessTokenStorageService} from '@/services/access-token-storage.service';
+import {ZodError} from 'zod';
+import {$ZodIssue} from 'zod/v4/core';
 
 export const authenticationInterceptor: HttpInterceptorFn = (
   request: HttpRequest<unknown>,
@@ -18,6 +20,13 @@ export const authenticationInterceptor: HttpInterceptorFn = (
   const modifiedRequest: HttpRequest<unknown> = accessTokenStorageService.setTokenToRequest(accessToken, request);
   return next(modifiedRequest)
     .pipe(
+      catchError((error: unknown) => {
+        if (error instanceof ZodError) {
+          const {issues} = error;
+          return throwError((): $ZodIssue[] => issues);
+        }
+        return throwError((): unknown => error);
+      }),
       tap((event: HttpEvent<unknown>): void => {
         if (event instanceof HttpResponse) {
           const newAccessToken: string = accessTokenStorageService.getTokenFromResponse(event);
