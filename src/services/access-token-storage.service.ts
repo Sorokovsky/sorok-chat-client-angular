@@ -23,7 +23,11 @@ export class AccessTokenStorageService {
     localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
   }
 
-  public setTokenToRequest(token: string, request: HttpRequest<unknown>): void {
-    request.headers.set(this.AUTHORIZATION_HEADER_NAME, this.BEARER_PREFIX + token);
+  public setTokenToRequest(token: string, request: HttpRequest<unknown>): HttpRequest<unknown> {
+    return request.clone({
+      setHeaders: {
+        [this.AUTHORIZATION_HEADER_NAME]: this.BEARER_PREFIX + token
+      }
+    });
   }
 }
