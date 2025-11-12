@@ -1,12 +1,14 @@
-<app-form>
+<app-form (onSubmit)="login()" [formGroup]="loginForm">
   <app-heading>Вхід у систему</app-heading>
   <mat-form-field appearance="outline" class="input">
     <mat-label>Електронна адреса</mat-label>
-    <input matInput name="email" required type="email"/>
+    <input formControlName="email" matInput required type="email"/>
+    <app-input-error [control]="loginForm.get('email')"/>
   </mat-form-field>
   <mat-form-field appearance="outline" class="input">
     <mat-label>Пароль</mat-label>
-    <input matInput name="password" required type="password"/>
+    <input formControlName="password" matInput required type="password"/>
+    <app-input-error [control]="loginForm.get('password')"/>
   </mat-form-field>
-  <button class="button" matButton="filled" type="submit">Відправити</button>
+  <button [disabled]="!loginForm.valid" class="button" matButton="filled" type="submit">Відправити</button>
 </app-form>

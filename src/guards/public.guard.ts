@@ -8,7 +8,7 @@ export function publicGuard(): boolean | UrlTree {
   const router: Router = inject(Router);
 
   const profile: CreateQueryResult<User> = useProfile();
-  const notAuthenticated: boolean = !profile.isSuccess();
+  const notAuthenticated: boolean = profile.data() === undefined;
   if (notAuthenticated) {
     return true;
   }

@@ -8,7 +8,7 @@ export function privateGuard(): boolean | UrlTree {
   const router: Router = inject(Router);
 
   const profile: CreateQueryResult<User> = useProfile();
-  const authenticated: boolean = profile.isSuccess();
+  const authenticated: boolean = profile.data() !== undefined;
   if (authenticated) {
     return true;
   }
