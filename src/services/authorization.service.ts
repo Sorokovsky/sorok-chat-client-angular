@@ -13,17 +13,17 @@ export class AuthorizationService {
   private readonly httpClient: HttpClient = inject(HttpClient);
 
   public register(registerDto: RegisterUser): Observable<User> {
-    return this.httpClient.post(REGISTRATION_URL, registerDto)
+    return this.httpClient.post<User>(REGISTRATION_URL, registerDto)
       .pipe(map((response: unknown): User => UserSchema.parse(response)));
   }
 
   public login(loginDto: LoginUser): Observable<User> {
-    return this.httpClient.put(LOGIN_URL, loginDto)
+    return this.httpClient.put<User>(LOGIN_URL, loginDto)
       .pipe(map((response: unknown): User => UserSchema.parse(response)));
   }
 
   public logout(): Observable<void> {
-    return this.httpClient.delete(LOGOUT_URL)
+    return this.httpClient.delete<void>(LOGOUT_URL)
       .pipe(map((): void => {
       }));
   }

@@ -31,6 +31,7 @@
     "@ngrx/effects": "^20.1.0",
     "@ngrx/store": "^20.1.0",
     "@ngrx/store-devtools": "^20.1.0",
+    "@tanstack/angular-query-experimental": "^5.90.9",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zod": "^4.1.12",
