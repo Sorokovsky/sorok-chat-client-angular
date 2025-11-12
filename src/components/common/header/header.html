@@ -1,6 +1,8 @@
 <header class="header">
   <div class="header__container">
-    <app-chats-sidebar-toggler/>
+    @if (profile.isSuccess()) {
+      <app-chats-sidebar-toggler/>
+    }
     <app-site-logo/>
   </div>
 </header>

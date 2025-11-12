@@ -9,7 +9,6 @@ export function publicGuard(): boolean | UrlTree {
 
   const profile: CreateQueryResult<User> = useProfile();
   const notAuthenticated: boolean = !profile.isSuccess();
-  console.log(notAuthenticated)
   if (notAuthenticated) {
     return true;
   }
