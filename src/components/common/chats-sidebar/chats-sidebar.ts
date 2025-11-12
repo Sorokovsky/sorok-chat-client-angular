@@ -1,4 +1,4 @@
-import {Component, inject, input, type Signal} from '@angular/core';
+import {Component, input, InputSignal, type Signal} from '@angular/core';
 import {Sidebar} from '@/components/ui/sidebar/sidebar';
 import {Store} from '@ngrx/store';
 import {toSignal} from '@angular/core/rxjs-interop';
@@ -15,10 +15,14 @@ import {SidebarPosition} from '@/schemes/sidebar-position.scheme';
   styleUrl: './chats-sidebar.scss',
 })
 export class ChatsSidebar {
-  private readonly store: Store = inject(Store);
-  public position = input<SidebarPosition>(SidebarPosition.left)
+  public isSidebarOpen: Signal<boolean>;
+  public position: InputSignal<SidebarPosition> = input<SidebarPosition>(SidebarPosition.left)
+  private readonly store: Store;
 
-  public isSidebarOpen: Signal<boolean> = toSignal(this.store.select(isChatsSidebarOpenSidebar), {
-    initialValue: initialState.isOpen
-  });
+  constructor(store: Store) {
+    this.store = store;
+    this.isSidebarOpen = toSignal(this.store.select(isChatsSidebarOpenSidebar), {
+      initialValue: initialState.isOpen
+    });
+  }
 }

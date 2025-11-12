@@ -11,6 +11,6 @@ import {NgOptimizedImage} from '@angular/common';
   styleUrl: './logo.scss',
 })
 export class Logo {
-  public image: InputSignal<string> = input<string>(DEFAULT_LOGO);
-  public size: InputSignal<number> = input<number>(DEFAULT_LOGO_SIZE);
+  protected image: InputSignal<string> = input<string>(DEFAULT_LOGO);
+  protected size: InputSignal<number> = input<number>(DEFAULT_LOGO_SIZE);
 }

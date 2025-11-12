@@ -1,4 +1,4 @@
-import {Component, inject, type Signal} from '@angular/core';
+import {Component, type Signal} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {toggleChats} from '@/stores/chats-sidebar/chats-sidebar.actions';
 import {BurgerIcon} from '@/components/ui/burger-icon/burger-icon';
@@ -15,10 +15,15 @@ import {initialState} from '@/stores/chats-sidebar/chats-sidebar.reducers';
   styleUrl: './chats-sidebar-toggler.scss',
 })
 export class ChatsSidebarToggler {
-  public store: Store = inject(Store);
-  public isOpen: Signal<boolean> = toSignal(this.store.select(isChatsSidebarOpenSidebar), {
-    initialValue: initialState.isOpen
-  });
+  protected store: Store;
+  protected isOpen: Signal<boolean>;
+
+  constructor(store: Store) {
+    this.store = store;
+    this.isOpen = toSignal(this.store.select(isChatsSidebarOpenSidebar), {
+      initialValue: initialState.isOpen
+    });
+  }
 
   public toggleSidebar(): void {
     this.store.dispatch(toggleChats());

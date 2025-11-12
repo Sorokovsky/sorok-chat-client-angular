@@ -7,6 +7,11 @@ import {Login} from '@/components/pages/login/login';
 
 export const ROUTES: Routes = [
   {
+    path: "",
+    redirectTo: "chats",
+    pathMatch: "full"
+  },
+  {
     path: "chats",
     component: MainLayout,
     children: [{
