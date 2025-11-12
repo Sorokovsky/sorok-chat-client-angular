@@ -17,7 +17,7 @@ export function useLogin(): CreateMutationResult<User, Error, LoginUser, void> {
   return injectMutation<User, Error, LoginUser, void>((): CreateMutationOptions<User, Error, LoginUser, void> => ({
     mutationKey: [LOGIN_KEY],
     mutationFn: async (data: LoginUser): Promise<User> => {
-      return await lastValueFrom<User>(authorizationService.login(data))
+      return await lastValueFrom<User>(authorizationService.login(data));
     },
     async onSettled(): Promise<void> {
       await queryClient.refetchQueries({queryKey: [PROFILE_KEY], exact: false});
