@@ -3,6 +3,7 @@ import {ChatsSidebar} from '@/components/common/chats-sidebar/chats-sidebar';
 import {Header} from '@/components/common/header/header';
 import {Router, RouterOutlet} from '@angular/router';
 import {useIsAuthenticated} from '@/hooks/is-authenticated.hook';
+import {LOGIN_PAGE} from '@/constants/pages.constants';
 
 @Component({
   selector: 'app-chats-layout',
@@ -23,7 +24,7 @@ export class ChatsLayout {
     effect((): void => {
       const authenticated: boolean = this.isAuthenticated();
       if (!authenticated) {
-        this.router.navigate(['/auth/login']);
+        this.router.navigate([LOGIN_PAGE.compiledPaths()]);
       }
     });
   }

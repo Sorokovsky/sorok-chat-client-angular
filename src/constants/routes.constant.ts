@@ -6,15 +6,16 @@ import {publicGuard} from '@/guards/public.guard';
 import {Login} from '@/components/pages/login/login';
 import {AuthLayout} from '@/components/layouts/auth-layout/auth-layout';
 import {Logout} from '@/components/pages/logout/logout';
+import {AUTH_PAGE, CHATS_PAGE, LOGIN_PAGE, LOGOUT_PAGE} from '@/constants/pages.constants';
 
 export const ROUTES: Routes = [
   {
     path: "",
-    redirectTo: "chats",
+    redirectTo: CHATS_PAGE.lastPath,
     pathMatch: "full"
   },
   {
-    path: "chats",
+    path: CHATS_PAGE.lastPath,
     component: ChatsLayout,
     children: [
       {
@@ -22,18 +23,18 @@ export const ROUTES: Routes = [
       component: Chats
       },
       {
-        path: "logout",
+        path: LOGOUT_PAGE.lastPath,
         component: Logout
       }
     ],
     canActivateChild: [privateGuard],
   },
   {
-    path: "auth",
+    path: AUTH_PAGE.lastPath,
     component: AuthLayout,
     children: [
       {
-      path: "login",
+        path: LOGIN_PAGE.lastPath,
       component: Login
       }
     ],

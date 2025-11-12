@@ -2,6 +2,7 @@ import {Component, effect, Signal} from '@angular/core';
 import {Header} from '@/components/common/header/header';
 import {Router, RouterOutlet} from '@angular/router';
 import {useIsAuthenticated} from '@/hooks/is-authenticated.hook';
+import {CHATS_PAGE} from '@/constants/pages.constants';
 
 @Component({
   selector: 'app-auth-layout',
@@ -21,7 +22,7 @@ export class AuthLayout {
     effect((): void => {
       const authenticated: boolean = this.isAuthenticated();
       if (authenticated) {
-        this.router.navigate(['/chats']);
+        this.router.navigate([CHATS_PAGE.compiledPaths()]);
       }
     });
   }
