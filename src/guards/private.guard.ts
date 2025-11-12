@@ -4,13 +4,13 @@ import {useProfile} from '@/hooks/profile.hook';
 import {type User} from '@/schemes/user.schema';
 import {inject} from '@angular/core';
 
-export function privateGuardGuard(): boolean | UrlTree {
+export function privateGuard(): boolean | UrlTree {
   const router: Router = inject(Router);
 
   const profile: CreateQueryResult<User> = useProfile();
-  const authenticated: boolean = profile.isError();
+  const authenticated: boolean = profile.isSuccess();
   if (authenticated) {
     return true;
   }
-  return router.createUrlTree(["/auth"])
+  return router.createUrlTree(["auth", "login"])
 }
