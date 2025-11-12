@@ -1,6 +1,6 @@
 <header class="header">
   <div class="header__container">
-    @if (profile.isSuccess()) {
+    @if (isAuthenticated()) {
       <app-chats-sidebar-toggler/>
     }
     <app-site-logo/>

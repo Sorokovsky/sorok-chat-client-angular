@@ -1,16 +1,10 @@
-import {Router, UrlTree} from '@angular/router';
+import {Router, type UrlTree} from '@angular/router';
 import {inject} from '@angular/core';
-import type {CreateQueryResult} from '@tanstack/angular-query-experimental';
-import type {User} from '@/schemes/user.schema';
-import {useProfile} from '@/hooks/profile.hook';
+import {AccessTokenStorageService} from '@/services/access-token-storage.service';
 
 export function publicGuard(): boolean | UrlTree {
   const router: Router = inject(Router);
-
-  const profile: CreateQueryResult<User> = useProfile();
-  const notAuthenticated: boolean = profile.data() === undefined;
-  if (notAuthenticated) {
-    return true;
-  }
-  return router.createUrlTree(["chats"])
+  const accessTokenStorageService: AccessTokenStorageService = inject(AccessTokenStorageService);
+  const isAuthenticated: boolean = accessTokenStorageService.getTokenFromLocalStorage() !== AccessTokenStorageService.DEFAULT_TOKEN
+  return isAuthenticated ? router.createUrlTree(["chats"]) : true;
 }

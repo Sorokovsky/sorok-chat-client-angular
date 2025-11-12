@@ -12,6 +12,6 @@ export function useProfile(): CreateQueryResult<User> {
     queryFn: async (): Promise<User> => {
       return await lastValueFrom(authorizationService.getProfile());
     },
-    retry: 0
+    retry: 0,
   }))
 }

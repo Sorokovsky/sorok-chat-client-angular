@@ -7,15 +7,15 @@ import type {HttpRequest, HttpResponse} from '@angular/common/http';
 export class AccessTokenStorageService {
   private readonly ACCESS_TOKEN_KEY: string = 'access_token';
   private readonly AUTHORIZATION_HEADER_NAME: string = "Authorization";
-  private readonly DEFAULT_TOKEN: string = "token";
+  public static readonly DEFAULT_TOKEN: string = "token";
   private readonly BEARER_PREFIX: string = "Bearer ";
 
   public getTokenFromLocalStorage(): string {
-    return localStorage.getItem(this.ACCESS_TOKEN_KEY) || this.DEFAULT_TOKEN;
+    return localStorage.getItem(this.ACCESS_TOKEN_KEY) || AccessTokenStorageService.DEFAULT_TOKEN;
   }
 
   public getTokenFromResponse(response: HttpResponse<unknown>): string {
-    const authorizationHeader: string = response.headers.get(this.AUTHORIZATION_HEADER_NAME) || this.DEFAULT_TOKEN;
+    const authorizationHeader: string = response.headers.get(this.AUTHORIZATION_HEADER_NAME) || AccessTokenStorageService.DEFAULT_TOKEN;
     return authorizationHeader.replaceAll(this.BEARER_PREFIX, "");
   }
 
