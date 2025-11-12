@@ -5,6 +5,7 @@ import {Chats} from '@/components/pages/chats/chats';
 import {publicGuard} from '@/guards/public.guard';
 import {Login} from '@/components/pages/login/login';
 import {AuthLayout} from '@/components/layouts/auth-layout/auth-layout';
+import {Logout} from '@/components/pages/logout/logout';
 
 export const ROUTES: Routes = [
   {
@@ -15,19 +16,27 @@ export const ROUTES: Routes = [
   {
     path: "chats",
     component: ChatsLayout,
-    children: [{
+    children: [
+      {
       path: "",
       component: Chats
-    }],
+      },
+      {
+        path: "logout",
+        component: Logout
+      }
+    ],
     canActivateChild: [privateGuard],
   },
   {
     path: "auth",
     component: AuthLayout,
-    children: [{
+    children: [
+      {
       path: "login",
       component: Login
-    }],
+      }
+    ],
     canActivateChild: [publicGuard]
   }
 ];
