@@ -1,0 +1,11 @@
+:host {
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
+
+.heading {
+  font-size: 30px;
+  line-height: 120%;
+  text-align: center;
+}

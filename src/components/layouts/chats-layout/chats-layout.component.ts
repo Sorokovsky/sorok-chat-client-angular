@@ -4,14 +4,14 @@ import {Header} from '@/components/common/header/header';
 import {RouterOutlet} from '@angular/router';
 
 @Component({
-  selector: 'app-main-layout',
+  selector: 'app-chats-layout',
   imports: [
     ChatsSidebar,
     Header,
     RouterOutlet
   ],
-  templateUrl: './main-layout.html',
-  styleUrl: './main-layout.scss',
+  templateUrl: './chats-layout.html',
+  styleUrl: './chats-layout.scss',
 })
-export class MainLayout {
+export class ChatsLayout {
 }

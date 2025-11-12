@@ -1,0 +1,12 @@
+:host {
+  display: contents;
+}
+
+.form {
+  display: flex;
+  min-width: 700px;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  padding: 20px 10px;
+  border-radius: 10px;
+}
