@@ -21,7 +21,7 @@ export class ChatsLayout {
   constructor(router: Router) {
     this.router = router;
     effect((): void => {
-      const authenticated = this.isAuthenticated();
+      const authenticated: boolean = this.isAuthenticated();
       if (!authenticated) {
         this.router.navigate(['/auth/login']);
       }

@@ -19,7 +19,7 @@ export function useLogin(): CreateMutationResult<User, Error, LoginUser, void> {
     mutationFn: async (data: LoginUser): Promise<User> => {
       return await lastValueFrom<User>(authorizationService.login(data))
     },
-    onSettled: async () => {
+    async onSettled(): Promise<void> {
       await queryClient.refetchQueries({queryKey: [PROFILE_KEY], exact: false});
     },
   }))
