@@ -1,5 +1,6 @@
-import type {ApplicationConfig} from '@angular/core';
+import {type ApplicationConfig, importProvidersFrom} from '@angular/core';
 import {provideTanStackQuery, QueryClient} from "@tanstack/angular-query-experimental"
+import {LucideAngularModule, UserRound} from 'lucide-angular';
 import {provideRouter} from '@angular/router';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {ROUTES} from '@/constants/routes.constant';
@@ -20,6 +21,9 @@ export const appConfig: ApplicationConfig = {
     }),
     provideEffects(),
     provideStoreDevtools(),
-    provideTanStackQuery(new QueryClient())
+    provideTanStackQuery(new QueryClient()),
+    importProvidersFrom(
+      LucideAngularModule.pick({UserRound})
+    )
   ],
 };
