@@ -1,0 +1,10 @@
+<mat-form-field appearance="outline" class="input">
+  <mat-label>{{ getMeta(controller())?.label }}</mat-label>
+  <input
+    [formControlName]=getNameOfController(controller())
+    [type]="getInputType(getNameOfController(controller())!)"
+    matInput
+    required
+  />
+  <app-input-error [control]="controller()"/>
+</mat-form-field>
