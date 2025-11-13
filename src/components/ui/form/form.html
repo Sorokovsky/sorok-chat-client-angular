@@ -12,5 +12,5 @@
       <app-input-error [control]="control"/>
     </mat-form-field>
   }
-  <button [disabled]="!formGroup().valid" class="button" matButton="filled" type="submit">{{ submitText() }}</button>
+  <app-button [disabled]="!formGroup().valid" [text]="submitText()" class="button" type="submit"/>
 </form>

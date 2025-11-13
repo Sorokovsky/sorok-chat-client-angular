@@ -4,7 +4,7 @@ import {Heading} from '@/components/ui/heading/heading';
 import {InputError} from '@/components/ui/input-error/input-error';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInput, MatLabel} from '@angular/material/input';
-import {MatButton} from '@angular/material/button';
+import {Button} from '@/components/ui/button/button';
 
 interface ControlMeta {
   label: string;
@@ -25,7 +25,7 @@ interface TypedFormControl<T = any> extends FormControl<T> {
     MatFormField,
     MatInput,
     MatLabel,
-    MatButton
+    Button
   ],
   templateUrl: './form.html',
   styleUrl: './form.scss',
