@@ -1,3 +1,16 @@
-<form (ngSubmit)="submitHandler($event)" [formGroup]="formGroup" class="form">
-  <ng-content/>
+<form (ngSubmit)="submitHandler()" [formGroup]="formGroup()" class="form">
+  <app-heading>{{ titleText() }}</app-heading>
+  @for (control of controls; track control) {
+    <mat-form-field appearance="outline" class="input">
+      <mat-label>{{ getMeta(control)?.label }}</mat-label>
+      <input
+        [formControlName]="getNameOfController(control)"
+        matInput
+        required
+        [type]="getInputType(getNameOfController(control)!)"
+      />
+      <app-input-error [control]="control"/>
+    </mat-form-field>
+  }
+  <button [disabled]="!formGroup().valid" class="button" matButton="filled" type="submit">{{ submitText() }}</button>
 </form>
