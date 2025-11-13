@@ -5,6 +5,10 @@
 .header {
   background-color: var(--primary-background-color);
   color: var(--primary-text-color);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 100;
 
   &__container {
     padding: 10px 15px;

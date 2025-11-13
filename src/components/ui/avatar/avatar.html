@@ -1,0 +1,7 @@
+<button (click)="onClick()" class="avatar" type="button">
+  @if (user() !== undefined) {
+    <app-named-avatar [user]="user()!"/>
+  } @else {
+    <app-default-avatar/>
+  }
+</button>

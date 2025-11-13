@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, input, type InputSignal, output, type OutputEmitterRef} from '@angular/core';
 import {type User} from '@/schemes/user.schema';
 import {NamedAvatar} from '@/components/ui/named-avatar/named-avatar';
 import {DefaultAvatar} from '@/components/ui/default-avatar/default-avatar';
@@ -13,6 +13,10 @@ import {DefaultAvatar} from '@/components/ui/default-avatar/default-avatar';
   styleUrl: './avatar.scss',
 })
 export class Avatar {
-  @Input() public user: User | undefined = undefined;
-  @Output() public clickHandler: EventEmitter<void> = new EventEmitter();
+  public user: InputSignal<User | undefined> = input<User | undefined>(undefined);
+  public onAvatarClick: OutputEmitterRef<void> = output<void>()
+
+  public onClick(): void {
+    this.onAvatarClick.emit();
+  }
 }

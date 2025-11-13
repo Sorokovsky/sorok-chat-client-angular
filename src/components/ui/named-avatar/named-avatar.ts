@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input, type InputSignal} from '@angular/core';
 import {type User} from '@/schemes/user.schema';
 
 @Component({
@@ -7,9 +7,10 @@ import {type User} from '@/schemes/user.schema';
   templateUrl: './named-avatar.html',
 })
 export class NamedAvatar {
-  @Input({required: true}) public user!: User;
+  public user: InputSignal<User> = input.required<User>();
 
   get avatarText(): string {
-    return `${this.user.firstName[0]}.${this.user.lastName[0]}.`;
+    const user: User = this.user()!;
+    return `${user.firstName[0]}.${user.lastName[0]}.`;
   }
 }
