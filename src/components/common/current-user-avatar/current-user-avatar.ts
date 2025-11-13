@@ -19,7 +19,6 @@ export class CurrentUserAvatar {
   protected isActive: WritableSignal<boolean> = signal<boolean>(false);
 
   public toggleLinks(): void {
-    console.log("toggle")
-    this.isActive.set(!this.isActive());
+    this.isActive.update((previous: boolean): boolean => !previous);
   }
 }

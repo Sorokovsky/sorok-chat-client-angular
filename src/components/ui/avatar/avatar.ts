@@ -14,9 +14,9 @@ import {DefaultAvatar} from '@/components/ui/default-avatar/default-avatar';
 })
 export class Avatar {
   public user: InputSignal<User | undefined> = input<User | undefined>(undefined);
-  public onAvatarClick: OutputEmitterRef<void> = output<void>()
+  public clicked: OutputEmitterRef<void> = output<void>()
 
   public onClick(): void {
-    this.onAvatarClick.emit();
+    this.clicked.emit();
   }
 }

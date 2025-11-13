@@ -1,4 +1,4 @@
-import {Component, EventEmitter, input, type InputSignal, Output} from '@angular/core';
+import {Component, input, type InputSignal, output, type OutputEmitterRef} from '@angular/core';
 
 @Component({
   selector: 'app-burger-icon',
@@ -10,7 +10,7 @@ export class BurgerIcon {
 
   public isOpen: InputSignal<boolean> = input<boolean>(false);
 
-  @Output() public clicked: EventEmitter<void> = new EventEmitter<void>();
+  public clicked: OutputEmitterRef<void> = output<void>();
 
   protected onClick() {
     this.clicked.emit();

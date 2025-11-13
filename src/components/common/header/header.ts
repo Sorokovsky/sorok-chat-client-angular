@@ -5,16 +5,14 @@ import {ChatsSidebarToggler} from '@/components/common/chats-sidebar-toggler/cha
 import {useIsAuthenticated} from '@/hooks/is-authenticated.hook';
 import {useProfile} from '@/hooks/profile.hook';
 import {type User} from '@/schemes/user.schema';
-import {Avatar} from '@/components/ui/avatar/avatar';
-import {UserLinks} from '@/components/common/user-links/user-links';
+import {CurrentUserAvatar} from '@/components/common/current-user-avatar/current-user-avatar';
 
 @Component({
   selector: 'app-header',
   imports: [
     SiteLogo,
     ChatsSidebarToggler,
-    Avatar,
-    UserLinks
+    CurrentUserAvatar
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
