@@ -1,1 +1,24 @@
-<p>chat works!</p>
+@if (!chat()) {
+  <div>Виберіть чат для спілкування</div>
+} @else {
+  <div class="heading">
+    <div class="info">
+      <h1 class="title">{{ chat()?.name }}</h1>
+      <span class="description">{{ chat()?.description }}</span>
+    </div>
+    <div class="messages">
+      <ul>
+        @for (message of chat()?.messages; track message) {
+          <li class="message">
+            <app-avatar [user]="message.author"/>
+            <div>
+              <span>{{ message.createdAt }}</span>
+              <span>{{ cryptoService.decrypt(message.text, message.author.macSecret) }}</span>
+              <span>{{ isMessageNotChanged(message) ? "✔️" : "❌" }}</span>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+}

@@ -4,7 +4,7 @@
     <ul class="chats">
       @for (chat of chats.data(); track chat) {
         <li>
-          <a [routerLink]="['/', {outlets: {primary: `${CHATS_PAGE.compiledPaths()}/${chat.id}`, aux: null}}]">
+          <a [routerLink]="['/', CHATS_PAGE.pathsArray[0], chat.id]">
             <span class="name">{{ chat.name }}</span>
             <span class="description">{{ chat.description }}</span>
           </a>
