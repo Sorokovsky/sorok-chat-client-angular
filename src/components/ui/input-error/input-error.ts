@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {AbstractControl} from '@angular/forms';
+import {Component, input, InputSignal} from '@angular/core';
+import {ValidationErrors} from '@angular/forms';
 import {ERROR_MESSAGES} from '@/constants/errors.constants';
 import {CommonModule} from '@angular/common';
 import {MatError} from '@angular/material/form-field';
@@ -11,12 +11,12 @@ import {MatError} from '@angular/material/form-field';
   styleUrl: './input-error.scss',
 })
 export class InputError {
-  @Input() public control: AbstractControl | null = null;
+  public errors: InputSignal<ValidationErrors | null> = input<ValidationErrors | null>(null);
 
   get processedMessages(): string[] {
-    if (!this.control || !this.control.errors) return [];
-    return Object.keys(this.control.errors).map((key: string): string => {
-      const error: Record<string, string> = this.control?.errors![key];
+    if (!this.errors()) return [];
+    return Object.keys(this.errors() as string[]).map((key: string): string => {
+      const error: Record<string, string> = this.errors()![key];
       let message: string = ERROR_MESSAGES[key] || key;
       if (error && typeof error === "object") {
         Object.keys(error).forEach((parameter: string): void => {
