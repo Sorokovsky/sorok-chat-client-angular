@@ -7,6 +7,7 @@ import {Login} from '@/components/pages/login/login';
 import {AuthLayout} from '@/components/layouts/auth-layout/auth-layout';
 import {Logout} from '@/components/pages/logout/logout';
 import {AUTH_PAGE, CHATS_PAGE, LOGIN_PAGE, LOGOUT_PAGE} from '@/constants/pages.constants';
+import {Chat} from '@/components/pages/chat/chat';
 
 export const ROUTES: Routes = [
   {
@@ -24,8 +25,13 @@ export const ROUTES: Routes = [
       },
       {
         path: LOGOUT_PAGE.lastPath,
-        component: Logout
-      }
+        component: Logout,
+        pathMatch: "full"
+      },
+      {
+        path: ":id",
+        component: Chat
+      },
     ],
     canActivateChild: [privateGuard],
   },

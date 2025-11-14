@@ -4,12 +4,14 @@ import {useProfile} from '@/hooks/profile.hook';
 import {type CreateQueryResult} from '@tanstack/angular-query-experimental';
 import {type User} from '@/schemes/user.schema';
 import {UserLinks} from '@/components/common/user-links/user-links';
+import {ClickOutside} from '@/directives/click-outside';
 
 @Component({
   selector: 'app-current-user-avatar',
   imports: [
     Avatar,
-    UserLinks
+    UserLinks,
+    ClickOutside
   ],
   templateUrl: './current-user-avatar.html',
   styleUrl: './current-user-avatar.scss',
@@ -20,5 +22,9 @@ export class CurrentUserAvatar {
 
   public toggleLinks(): void {
     this.isActive.update((previous: boolean): boolean => !previous);
+  }
+
+  public hideLinks(): void {
+    this.isActive.update((): boolean => false);
   }
 }

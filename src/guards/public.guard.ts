@@ -6,6 +6,6 @@ import {CHATS_PAGE} from '@/constants/pages.constants';
 export function publicGuard(): boolean | UrlTree {
   const router: Router = inject(Router);
   const accessTokenStorageService: AccessTokenStorageService = inject(AccessTokenStorageService);
-  const isAuthenticated: boolean = accessTokenStorageService.getTokenFromLocalStorage() !== AccessTokenStorageService.DEFAULT_TOKEN
+  const isAuthenticated: boolean = accessTokenStorageService.getTokenFromLocalStorage() !== AccessTokenStorageService.DEFAULT_TOKEN;
   return isAuthenticated ? router.createUrlTree(CHATS_PAGE.pathsArray) : true;
 }

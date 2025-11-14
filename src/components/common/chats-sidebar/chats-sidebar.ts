@@ -11,29 +11,30 @@ import {type CreateQueryResult} from '@tanstack/angular-query-experimental';
 import {type Chat} from '@/schemes/chat.schema';
 import {RouterLink} from '@angular/router';
 import {CHATS_PAGE} from '@/constants/pages.constants';
+import {type Page} from '@/schemes/page.schema';
 
 @Component({
   selector: 'app-chats-sidebar',
   imports: [
     Sidebar,
     Heading,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './chats-sidebar.html',
   styleUrl: './chats-sidebar.scss',
+  standalone: true
 })
 export class ChatsSidebar {
   public isSidebarOpen: Signal<boolean>;
-  public position: InputSignal<SidebarPosition> = input<SidebarPosition>(SidebarPosition.left)
+  public position: InputSignal<SidebarPosition> = input<SidebarPosition>(SidebarPosition.left);
   private readonly store: Store;
   protected chats: CreateQueryResult<Chat[]> = useChatsByMe();
-  protected readonly CHATS_PAGE = CHATS_PAGE;
+  protected readonly CHATS_PAGE: Page = CHATS_PAGE;
 
   constructor(store: Store) {
     this.store = store;
     this.isSidebarOpen = toSignal(this.store.select(isChatsSidebarOpenSidebar), {
       initialValue: initialState.isOpen
     });
-    console.log(this.chats.data())
   }
 }

@@ -1,4 +1,4 @@
 <div class="avatar">
-  <app-avatar (clicked)="toggleLinks()" [user]="profile.data()"/>
+  <app-avatar (clickOutside)="hideLinks()" (clicked)="toggleLinks()" [user]="profile.data()"/>
   <app-user-links [isActive]="isActive()"/>
 </div>
