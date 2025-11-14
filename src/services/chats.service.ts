@@ -18,4 +18,8 @@ export class ChatsService {
     return this.httpClient.get<Chat[]>(CHATS_BY_ME_URL)
       .pipe(map((response: unknown): Chat[] => ChatSchema.array().parse(response)));
   }
+
+  public sendMessage() {
+
+  }
 }
