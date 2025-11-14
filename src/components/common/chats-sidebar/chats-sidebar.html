@@ -1,3 +1,15 @@
 <app-sidebar [isOpen]="isSidebarOpen()" [position]="position()">
-  <h2>Чати</h2>
+  <app-heading>Чати</app-heading>
+  @if (chats.data()) {
+    <ul class="chats">
+      @for (chat of chats.data(); track chat) {
+        <li>
+          <a [routerLink]="['/', {outlets: {primary: `${CHATS_PAGE.compiledPaths()}/${chat.id}`, aux: null}}]">
+            <span class="name">{{ chat.name }}</span>
+            <span class="description">{{ chat.description }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  }
 </app-sidebar>

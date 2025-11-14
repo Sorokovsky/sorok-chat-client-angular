@@ -11,6 +11,6 @@ export class NamedAvatar {
 
   get avatarText(): string {
     const user: User = this.user()!;
-    return `${user.firstName[0]}.${user.lastName[0]}.`;
+    return `${user.firstName[0]}.${user.middleName[0]}.`;
   }
 }
