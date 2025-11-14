@@ -7,6 +7,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {Avatar} from '@/components/ui/avatar/avatar';
 import {CryptoService} from '@/services/crypto.service';
 import {Message} from '@/schemes/message.schema';
+import {formatDate} from '@/helpers/format-date.helper';
 
 @Component({
   selector: 'app-chat',
@@ -40,4 +41,6 @@ export class Chat {
   public isMessageNotChanged(message: Message): boolean {
     return this.cryptoService.isSigned(message.text, message.mac, message.author.macSecret);
   }
+
+  protected readonly formatDate: (date: Date) => string = formatDate;
 }

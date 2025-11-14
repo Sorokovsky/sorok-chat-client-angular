@@ -1,3 +1,35 @@
 :host {
   max-width: 1600px;
+  width: 100%;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.heading {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }

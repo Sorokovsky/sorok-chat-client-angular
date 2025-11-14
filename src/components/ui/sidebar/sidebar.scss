@@ -4,6 +4,7 @@
 
 .sidebar {
   position: absolute;
+  z-index: 100;
   top: 0;
   left: 0;
   height: calc(100vh - 76px);
