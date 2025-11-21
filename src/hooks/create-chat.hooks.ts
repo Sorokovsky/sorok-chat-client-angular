@@ -10,7 +10,7 @@ import {lastValueFrom} from 'rxjs';
 import {ChatsService} from '@/services/chats.service';
 import {inject} from '@angular/core';
 import {type NewChat} from '@/schemes/new-chat.scheme';
-import {Router, ROUTES} from '@angular/router';
+import {Router} from '@angular/router';
 import {CHATS_PAGE} from '@/constants/pages.constants';
 
 export function useCreateChat(): CreateMutationResult<Chat, Error, NewChat, void> {
@@ -24,8 +24,8 @@ export function useCreateChat(): CreateMutationResult<Chat, Error, NewChat, void
     },
     async onSuccess(chat: Chat): Promise<void> {
       await client.invalidateQueries({queryKey: [GET_CHATS_KEY]});
-      CHATS_PAGE.pathsArray.push(`${chat.id}`)
-      await router.navigate(CHATS_PAGE.pathsArray);
+      const paths: string[] = [...CHATS_PAGE.pathsArray, `${chat.id}`];
+      await router.navigate(paths);
     }
   }));
 }

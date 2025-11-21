@@ -12,6 +12,7 @@ import {type Chat} from '@/schemes/chat.schema';
 import {RouterLink} from '@angular/router';
 import {CHATS_PAGE, CREATE_CHAT} from '@/constants/pages.constants';
 import {type Page} from '@/schemes/page.schema';
+import {hideChats} from '@/stores/chats-sidebar/chats-sidebar.actions';
 
 @Component({
   selector: 'app-chats-sidebar',
@@ -39,4 +40,12 @@ export class ChatsSidebar {
   }
 
   protected readonly CREATE_CHAT = CREATE_CHAT;
+
+  protected getChatPathById(chatId: number): string[] {
+    return [...CHATS_PAGE.pathsArray, String(chatId)];
+  }
+
+  protected onSelectChat(): void {
+    this.store.dispatch(hideChats());
+  }
 }

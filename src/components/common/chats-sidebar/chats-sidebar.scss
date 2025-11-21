@@ -33,4 +33,8 @@
     background: var(--border-color);
     color: var(--primary-text-color);
   }
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
 }

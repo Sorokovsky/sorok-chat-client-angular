@@ -13,7 +13,7 @@ export function publicGuard(): boolean | UrlTree {
   } catch (error) {
     id = null;
   }
-  const urlTree: string[] = CHATS_PAGE.pathsArray;
+  const urlTree: string[] = [...CHATS_PAGE.pathsArray];
   if (id) urlTree.push(String(id));
   const accessTokenStorageService: AccessTokenStorageService = inject(AccessTokenStorageService);
   const isAuthenticated: boolean = accessTokenStorageService.getTokenFromLocalStorage() !== AccessTokenStorageService.DEFAULT_TOKEN;
