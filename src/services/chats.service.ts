@@ -28,7 +28,7 @@ export class ChatsService {
   }
 
   public sendMessage(message: NewMessage, chatId: number): Observable<Chat> {
-    return this.httpClient.post<Message>(`${WRITE_MESSAGE_URL}/${chatId}`, message)
+    return this.httpClient.put<Message>(`${WRITE_MESSAGE_URL}/${chatId}`, message)
       .pipe(map((response: unknown): Chat => ChatSchema.parse(response)));
   }
 }
