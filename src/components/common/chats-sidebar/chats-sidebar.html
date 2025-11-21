@@ -6,7 +6,7 @@
       @for (chat of chats.data(); track chat) {
         <li>
           <a [routerLink]="[CHATS_PAGE.pathsArray.push(`${chat.id}`)]">
-            <span class="name">{{ chat.name }}</span>
+            <span class="name">{{ chat.title }}</span>
             <span class="description">{{ chat.description }}</span>
           </a>
         </li>
