@@ -1,10 +1,11 @@
 <app-sidebar [isOpen]="isSidebarOpen()" [position]="position()">
   <app-heading>Чати</app-heading>
+  <a class="add-chat" [routerLink]="CREATE_CHAT.pathsArray">{{CREATE_CHAT.pageName}}</a>
   @if (chats.data()) {
     <ul class="chats">
       @for (chat of chats.data(); track chat) {
         <li>
-          <a [routerLink]="['/', CHATS_PAGE.pathsArray[0], chat.id]">
+          <a [routerLink]="[CHATS_PAGE.pathsArray.push(`${chat.id}`)]">
             <span class="name">{{ chat.name }}</span>
             <span class="description">{{ chat.description }}</span>
           </a>

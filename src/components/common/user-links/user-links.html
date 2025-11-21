@@ -1,7 +1,7 @@
 <nav [class.active]="isActive()" class="user-links">
   <ul>
     @for (link of links; track link) {
-      <li><a [routerLink]="['/', {outlets: {primary: link.compiledPaths(), aux: null}}]">{{ link.pageName }}</a></li>
+      <li><a [routerLink]="link.pathsArray">{{ link.pageName }}</a></li>
     }
   </ul>
 </nav>

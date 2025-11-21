@@ -21,3 +21,16 @@
     }
   }
 }
+
+.add-chat {
+  font-size: 20px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  transition: .3s all ease;
+  &:hover {
+    background: var(--border-color);
+    color: var(--primary-text-color);
+  }
+}

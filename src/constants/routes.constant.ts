@@ -6,8 +6,9 @@ import {publicGuard} from '@/guards/public.guard';
 import {Login} from '@/components/pages/login/login';
 import {AuthLayout} from '@/components/layouts/auth-layout/auth-layout';
 import {Logout} from '@/components/pages/logout/logout';
-import {AUTH_PAGE, CHATS_PAGE, LOGIN_PAGE, LOGOUT_PAGE} from '@/constants/pages.constants';
+import {AUTH_PAGE, CHATS_PAGE, CREATE_CHAT, LOGIN_PAGE, LOGOUT_PAGE} from '@/constants/pages.constants';
 import {Chat} from '@/components/pages/chat/chat';
+import {CreateChat} from '@/components/pages/create-chat/create-chat';
 
 export const ROUTES: Routes = [
   {
@@ -26,6 +27,11 @@ export const ROUTES: Routes = [
       {
         path: LOGOUT_PAGE.lastPath,
         component: Logout,
+        pathMatch: "full"
+      },
+      {
+        path: CREATE_CHAT.lastPath,
+        component: CreateChat,
         pathMatch: "full"
       },
       {

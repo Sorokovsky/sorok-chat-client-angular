@@ -10,7 +10,7 @@ import {useChatsByMe} from '@/hooks/chats-by-me.hook';
 import {type CreateQueryResult} from '@tanstack/angular-query-experimental';
 import {type Chat} from '@/schemes/chat.schema';
 import {RouterLink} from '@angular/router';
-import {CHATS_PAGE} from '@/constants/pages.constants';
+import {CHATS_PAGE, CREATE_CHAT} from '@/constants/pages.constants';
 import {type Page} from '@/schemes/page.schema';
 
 @Component({
@@ -37,4 +37,6 @@ export class ChatsSidebar {
       initialValue: initialState.isOpen
     });
   }
+
+  protected readonly CREATE_CHAT = CREATE_CHAT;
 }

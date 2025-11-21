@@ -4,7 +4,7 @@ import {UserSchema} from '@/schemes/user.schema';
 import {MessageSchema} from '@/schemes/message.schema';
 
 export const ChatSchema = BaseScheme.extend({
-  name: zod.string(),
+  title: zod.string(),
   description: zod.string(),
   members: UserSchema.array(),
   messages: MessageSchema.array()
