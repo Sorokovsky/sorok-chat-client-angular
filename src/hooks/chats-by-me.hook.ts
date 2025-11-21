@@ -13,6 +13,5 @@ export function useChatsByMe(): CreateQueryResult<Chat[]> {
     queryFn: async (): Promise<Chat[]> => {
       return await lastValueFrom(chatsService.getByMe());
     },
-    refetchInterval: 1000
   }));
 }
