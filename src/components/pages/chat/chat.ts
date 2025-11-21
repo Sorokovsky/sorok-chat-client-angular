@@ -9,16 +9,21 @@ import {CryptoService} from '@/services/crypto.service';
 import {type Message} from '@/schemes/message.schema';
 import {formatDate} from '@/helpers/format-date.helper';
 import {Input} from '@/components/ui/input/input';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, Validators} from '@angular/forms';
 import {TypedFormControl} from '@/schemes/input.schema';
 import {Button} from '@/components/ui/button/button';
+import {User} from '@/schemes/user.schema';
+import {useProfile} from '@/hooks/profile.hook';
+import {NewMessage} from '@/schemes/new-message.schema';
+import {useWriteMessage} from '@/hooks/write-message.hook';
 
 @Component({
   selector: 'app-chat',
   imports: [
     Avatar,
     Input,
-    Button
+    Button,
+    FormsModule
   ],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
@@ -28,6 +33,8 @@ export class Chat {
 
   private activatedRoute: ActivatedRoute;
   protected cryptoService: CryptoService;
+  private profile: CreateQueryResult<User> = useProfile();
+  private writeMessage = useWriteMessage();
 
   protected messageForm: FormGroup;
   protected textInput: TypedFormControl;
@@ -55,6 +62,21 @@ export class Chat {
 
   public isMessageNotChanged(message: Message): boolean {
     return this.cryptoService.isSigned(message.text, message.mac, message.author.macSecret);
+  }
+
+  public async sendMessage(): Promise<void> {
+    const data: unknown = this.messageForm.value;
+    if (data && typeof data == "object" && "text" in data && typeof data.text === "string") {
+      const macSecret: string = this.profile.data()?.macSecret!;
+      const text: string = this.cryptoService.encrypt(data.text, macSecret);
+      const mac: string = this.cryptoService.sign(text, macSecret);
+      const newMessage: NewMessage = {text, mac};
+      this.messageForm.reset();
+      this.writeMessage.mutate({
+        message: newMessage,
+        chatId: this.chat()!.id
+      });
+    }
   }
 
   protected readonly formatDate: (date: Date) => string = formatDate;

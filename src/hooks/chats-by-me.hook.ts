@@ -12,6 +12,7 @@ export function useChatsByMe(): CreateQueryResult<Chat[]> {
     queryKey: [GET_CHATS_KEY],
     queryFn: async (): Promise<Chat[]> => {
       return await lastValueFrom(chatsService.getByMe());
-    }
+    },
+    refetchInterval: 1000
   }));
 }

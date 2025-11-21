@@ -24,7 +24,7 @@
     </ul>
   </div>
   <div class="send-message">
-    <form>
+    <form (ngSubmit)="sendMessage()">
       <app-input [formGroup]="messageForm" [controller]="textInput"/>
       <app-button [disabled]="!messageForm.valid" text="Відправити"/>
     </form>
