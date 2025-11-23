@@ -1,4 +1,4 @@
-import {Component, effect, Signal, signal, type WritableSignal} from '@angular/core';
+import {Component, effect, OnInit, Signal, signal, type WritableSignal} from '@angular/core';
 import {ActivatedRoute, type ParamMap} from '@angular/router';
 import {useChatsByMe} from '@/hooks/chats-by-me.hook';
 import {type CreateQueryResult} from '@tanstack/angular-query-experimental';
@@ -12,10 +12,11 @@ import {Input} from '@/components/ui/input/input';
 import {FormBuilder, FormGroup, FormsModule, Validators} from '@angular/forms';
 import {TypedFormControl} from '@/schemes/input.schema';
 import {Button} from '@/components/ui/button/button';
-import {User} from '@/schemes/user.schema';
+import {type User} from '@/schemes/user.schema';
 import {useProfile} from '@/hooks/profile.hook';
-import {NewMessage} from '@/schemes/new-message.schema';
-import {useWriteMessage} from '@/hooks/write-message.hook';
+import {type NewMessage} from '@/schemes/new-message.schema';
+import {MessagesService} from '@/services/messages.service';
+import {type ReceivedMessage} from '@/schemes/received-message.scheme';
 
 @Component({
   selector: 'app-chat',
@@ -28,13 +29,14 @@ import {useWriteMessage} from '@/hooks/write-message.hook';
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
-export class Chat {
+export class Chat implements OnInit {
   private readonly idName: string = 'id';
 
-  private activatedRoute: ActivatedRoute;
+  private readonly activatedRoute: ActivatedRoute;
+  private readonly messagesService: MessagesService;
+
   protected cryptoService: CryptoService;
   private profile: CreateQueryResult<User> = useProfile();
-  private writeMessage = useWriteMessage();
 
   protected messageForm: FormGroup;
   protected textInput: TypedFormControl;
@@ -43,9 +45,10 @@ export class Chat {
   private chats: CreateQueryResult<ChatType[]> = useChatsByMe();
   private parameters: Signal<ParamMap | undefined>;
 
-  constructor(activatedRoute: ActivatedRoute, cryptoService: CryptoService, formBuilder: FormBuilder) {
+  constructor(activatedRoute: ActivatedRoute, cryptoService: CryptoService, formBuilder: FormBuilder, messagesService: MessagesService) {
     this.activatedRoute = activatedRoute;
     this.cryptoService = cryptoService;
+    this.messagesService = messagesService;
     this.parameters = toSignal<ParamMap | undefined>(this.activatedRoute.paramMap);
     this.textInput = formBuilder.control('', [Validators.required]) as TypedFormControl;
     this.messageForm = formBuilder.group({
@@ -60,6 +63,16 @@ export class Chat {
     });
   }
 
+  async ngOnInit(): Promise<void> {
+    await this.messagesService.connectIfPossible()
+    this.messagesService.messageReceived$
+      .subscribe((received: ReceivedMessage | null): void => {
+          if (received === null) return;
+
+        }
+      );
+  }
+
   public isMessageNotChanged(message: Message): boolean {
     return this.cryptoService.isSigned(message.text, message.mac, message.author.macSecret);
   }
@@ -72,10 +85,7 @@ export class Chat {
       const mac: string = this.cryptoService.sign(text, macSecret);
       const newMessage: NewMessage = {text, mac};
       this.messageForm.reset();
-      this.writeMessage.mutate({
-        message: newMessage,
-        chatId: this.chat()!.id
-      });
+      await this.messagesService.sendMessage(newMessage, this.chat()!.id);
     }
   }
 
