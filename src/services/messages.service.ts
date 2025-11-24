@@ -1,5 +1,5 @@
 import {Injectable, NgZone, OnDestroy} from '@angular/core';
-import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
+import {HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
 import {AccessTokenStorageService} from '@/services/access-token-storage.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {ReceivedMessage} from '@/schemes/received-message.scheme';
@@ -55,7 +55,8 @@ export class MessagesService implements OnDestroy {
   private async startConnection(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(MESSAGES_HUB, {
-        accessTokenFactory: (): string => this.accessTokenService.getTokenFromLocalStorage()
+        accessTokenFactory: (): string => this.accessTokenService.getTokenFromLocalStorage(),
+        transport: HttpTransportType.WebSockets
       })
       .withAutomaticReconnect()
       .build();
