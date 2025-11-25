@@ -61,13 +61,6 @@ export class MessagesService implements OnDestroy {
       .withAutomaticReconnect()
       .build();
 
-    this.hubConnection.on(ChatsActions.RECEIVE_MESSAGE, (message: Message, chatId: number): void => {
-      this.ngZone.run((): void => {
-        this.messageReceivedSubject.next({message, chatId});
-      });
-    });
-    this.hubConnection.onclose((): void => this.connectionStatusSubject.next(false));
-    this.hubConnection.onreconnected((): void => this.connectionStatusSubject.next(true));
     try {
       await this.hubConnection.start();
       this.connectionStatusSubject.next(true);
@@ -76,5 +69,13 @@ export class MessagesService implements OnDestroy {
       this.connectionStatusSubject.next(false);
       console.error("Помилка підключення", error);
     }
+
+    this.hubConnection.on(ChatsActions.RECEIVE_MESSAGE, (message: Message, chatId: number): void => {
+      this.ngZone.run((): void => {
+        this.messageReceivedSubject.next({message, chatId});
+      });
+    });
+    this.hubConnection.onclose((): void => this.connectionStatusSubject.next(false));
+    this.hubConnection.onreconnected((): void => this.connectionStatusSubject.next(true));
   }
 }

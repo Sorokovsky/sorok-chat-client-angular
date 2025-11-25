@@ -7,5 +7,12 @@
       "^/api": ""
     },
     "logLevel": "debug"
+  },
+  "/messages": {
+    "target": "http://localhost:5217",
+    "secure": false,
+    "ws": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
 }

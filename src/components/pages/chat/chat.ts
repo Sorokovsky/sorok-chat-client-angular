@@ -67,10 +67,12 @@ export class Chat implements OnInit {
     await this.messagesService.connectIfPossible()
     this.messagesService.messageReceived$
       .subscribe((received: ReceivedMessage | null): void => {
-          if (received === null) return;
-
-        }
-      );
+        const chats: ChatType[] | undefined = this.chats.data()
+        if (received === null || chats === undefined) return;
+        const chat: ChatType | undefined = chats.find((chat: ChatType): boolean => chat.id === received.chatId);
+        if (chat === undefined) return;
+        chat.messages.push(received.message);
+      });
   }
 
   public isMessageNotChanged(message: Message): boolean {
