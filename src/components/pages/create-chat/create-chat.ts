@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormControl, type FormGroup, Validators} from '@angular/forms';
 import {type CreateMutationResult} from '@tanstack/angular-query-experimental';
 import {type Chat} from '@/schemes/chat.schema';
@@ -15,6 +15,7 @@ import {Form} from '@/components/ui/form/form';
   styleUrl: './create-chat.scss',
 })
 export class CreateChat {
+
   protected form: FormGroup;
   protected title: string = "Створення чату";
   protected submitText: string = "Створити";

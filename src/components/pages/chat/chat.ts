@@ -67,7 +67,7 @@ export class Chat implements OnInit {
       });
   }
 
-  async sendMessage(message: SentMessage): Promise<void> {
+  public async sendMessage(message: SentMessage): Promise<void> {
     await this.messagesService.sendMessage(message.message, message.chatId);
   }
 }

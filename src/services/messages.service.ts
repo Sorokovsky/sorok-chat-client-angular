@@ -52,6 +52,15 @@ export class MessagesService implements OnDestroy {
     }
   }
 
+  public async joinToChat(chatId: number): Promise<void> {
+    if (!this.hubConnection || this.hubConnection.state !== HubConnectionState.Connected) return;
+    try {
+      await this.hubConnection.invoke(ChatsActions.JOIN_TO_CHAT, chatId);
+    } catch (error: unknown) {
+      console.log("Помилка: ", error);
+    }
+  }
+
   private async startConnection(): Promise<void> {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(MESSAGES_HUB, {
