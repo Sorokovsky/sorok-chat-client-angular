@@ -1,4 +1,4 @@
-import {Component, input, type InputSignal} from '@angular/core';
+import {AfterViewChecked, Component, input, type InputSignal} from '@angular/core';
 import {type Message} from '@/schemes/message.schema';
 import {MessageItem} from '@/components/common/message-item/message-item';
 
@@ -10,6 +10,10 @@ import {MessageItem} from '@/components/common/message-item/message-item';
   templateUrl: './message-list.html',
   styleUrl: './message-list.scss',
 })
-export class MessageList {
+export class MessageList implements AfterViewChecked {
   public messages: InputSignal<Message[]> = input.required<Message[]>();
+
+  public ngAfterViewChecked(): void {
+
+  }
 }
