@@ -1,7 +1,10 @@
-@if (!chat()) {
+@let currentChat = chat();
+@let currentUser = profile.data();
+
+@if (currentChat === undefined || currentUser === undefined) {
   <div>Виберіть чат для спілкування</div>
 } @else {
-  <app-chat-heading [chat]="chat()!"/>
-  <app-message-list [messages]="chat()!.messages"/>
-  <app-send-message (sentMessage)="sendMessage($event)" [chatId]="chat()!.id" [currentUser]="profile.data()!"/>
+  <app-chat-heading [chat]="currentChat"/>
+  <app-message-list [messages]="currentChat.messages"/>
+  <app-send-message (sentMessage)="sendMessage($event)" [chatId]="currentChat.id" [currentUser]="currentUser"/>
 }
