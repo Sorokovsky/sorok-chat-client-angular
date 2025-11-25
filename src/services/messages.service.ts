@@ -32,7 +32,7 @@ export class MessagesService implements OnDestroy {
   }
 
   public async connectIfPossible(): Promise<void> {
-    if (this.hubConnection?.state === HubConnectionState.Connected) return;
+    if (!!this.hubConnection && this.hubConnection?.state === HubConnectionState.Connected) return;
     await this.startConnection();
   }
 

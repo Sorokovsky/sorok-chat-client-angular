@@ -1,0 +1,14 @@
+:host {
+  display: contents;
+}
+
+.heading {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

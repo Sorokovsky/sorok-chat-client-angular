@@ -1,0 +1,6 @@
+<div class="send-message">
+  <form (ngSubmit)="sendMessage()">
+    <app-input [controller]="textInput" [formGroup]="messageForm"/>
+    <app-button [disabled]="!messageForm.valid" text="Відправити"/>
+  </form>
+</div>

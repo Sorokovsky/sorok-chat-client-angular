@@ -1,4 +1,4 @@
-import {Component, input, InputSignal} from '@angular/core';
+import {Component, input, type InputSignal} from '@angular/core';
 import {Avatar} from "@/components/ui/avatar/avatar";
 import {formatDate} from '@/helpers/format-date.helper';
 import {type Message} from '@/schemes/message.schema';

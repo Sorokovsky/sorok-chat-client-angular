@@ -1,17 +1,7 @@
 @if (!chat()) {
   <div>Виберіть чат для спілкування</div>
 } @else {
-  <div class="heading">
-    <div class="info">
-      <h1 class="title">{{ chat()?.title }}</h1>
-      <span class="description">{{ chat()?.description }}</span>
-    </div>
-  </div>
+  <app-chat-heading [chat]="chat()!"/>
   <app-message-list [messages]="chat()!.messages"/>
-  <div class="send-message">
-    <form (ngSubmit)="sendMessage()">
-      <app-input [formGroup]="messageForm" [controller]="textInput"/>
-      <app-button [disabled]="!messageForm.valid" text="Відправити"/>
-    </form>
-  </div>
+  <app-send-message (sentMessage)="sendMessage($event)" [chatId]="chat()!.id" [currentUser]="profile.data()!"/>
 }
