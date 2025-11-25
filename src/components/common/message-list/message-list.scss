@@ -1,0 +1,12 @@
+:host {
+  display: contents;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1 1 auto;
+  border-bottom: 1px solid var(--border-color);
+  overflow-y: scroll;
+}

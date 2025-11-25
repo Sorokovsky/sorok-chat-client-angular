@@ -4,7 +4,6 @@ import {useChatsByMe} from '@/hooks/chats-by-me.hook';
 import {type CreateQueryResult} from '@tanstack/angular-query-experimental';
 import {type Chat as ChatType} from "@/schemes/chat.schema";
 import {toSignal} from '@angular/core/rxjs-interop';
-import {Avatar} from '@/components/ui/avatar/avatar';
 import {CryptoService} from '@/services/crypto.service';
 import {type Message} from '@/schemes/message.schema';
 import {formatDate} from '@/helpers/format-date.helper';
@@ -17,14 +16,15 @@ import {useProfile} from '@/hooks/profile.hook';
 import {type NewMessage} from '@/schemes/new-message.schema';
 import {MessagesService} from '@/services/messages.service';
 import {type ReceivedMessage} from '@/schemes/received-message.scheme';
+import {MessageList} from '@/components/common/message-list/message-list';
 
 @Component({
   selector: 'app-chat',
   imports: [
-    Avatar,
     Input,
     Button,
-    FormsModule
+    FormsModule,
+    MessageList
   ],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',

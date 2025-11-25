@@ -1,0 +1,10 @@
+<li class="message">
+  <app-avatar [user]="message().author"/>
+  <div>
+    <div>
+      <span>{{ decryptMessage(message()) }} {{ isMessageNotChanged(message()) ? "✔️" : "❌" }}</span>
+      <span>{{ formatDate(message().createdAt) }}</span>
+      <span></span>
+    </div>
+  </div>
+</li>

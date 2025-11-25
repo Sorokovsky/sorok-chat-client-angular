@@ -1,0 +1,7 @@
+<div class="messages">
+  <ul>
+    @for (message of messages(); track message) {
+      <app-message-item [message]="message"/>
+    }
+  </ul>
+</div>

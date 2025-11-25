@@ -1,0 +1,14 @@
+:host {
+  display: contents;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+}

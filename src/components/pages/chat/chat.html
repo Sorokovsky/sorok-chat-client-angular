@@ -7,22 +7,7 @@
       <span class="description">{{ chat()?.description }}</span>
     </div>
   </div>
-  <div class="messages">
-    <ul>
-        @for (message of chat()?.messages; track message) {
-          <li class="message">
-            <app-avatar [user]="message.author"/>
-            <div>
-              <div>
-                <span>{{ cryptoService.decrypt(message.text, message.author.macSecret) }} {{ isMessageNotChanged(message) ? "✔️" : "❌" }}</span>
-                <span>{{ formatDate(message.createdAt) }}</span>
-                <span></span>
-              </div>
-            </div>
-          </li>
-        }
-    </ul>
-  </div>
+  <app-message-list [messages]="chat()!.messages"/>
   <div class="send-message">
     <form (ngSubmit)="sendMessage()">
       <app-input [formGroup]="messageForm" [controller]="textInput"/>
