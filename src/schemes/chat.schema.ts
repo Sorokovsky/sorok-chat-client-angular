@@ -7,7 +7,9 @@ export const ChatSchema = BaseScheme.extend({
   title: zod.string(),
   description: zod.string(),
   members: UserSchema.array(),
-  messages: MessageSchema.array()
+  messages: MessageSchema.array(),
+  staticPublicKey: zod.string(),
+  ephemeralPublicKey: zod.string(),
 });
 
 export type Chat = zod.infer<typeof ChatSchema>;
