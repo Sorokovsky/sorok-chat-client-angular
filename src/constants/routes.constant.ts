@@ -6,9 +6,10 @@ import {publicGuard} from '@/guards/public.guard';
 import {Login} from '@/components/pages/login/login';
 import {AuthLayout} from '@/components/layouts/auth-layout/auth-layout';
 import {Logout} from '@/components/pages/logout/logout';
-import {AUTH_PAGE, CHATS_PAGE, CREATE_CHAT, LOGIN_PAGE, LOGOUT_PAGE} from '@/constants/pages.constants';
+import {AUTH_PAGE, CHATS_PAGE, CREATE_CHAT, LOGIN_PAGE, LOGOUT_PAGE, REGISTER_PAGE} from '@/constants/pages.constants';
 import {Chat} from '@/components/pages/chat/chat';
 import {CreateChat} from '@/components/pages/create-chat/create-chat';
+import {Register} from '@/components/pages/register/register';
 
 export const ROUTES: Routes = [
   {
@@ -47,7 +48,11 @@ export const ROUTES: Routes = [
     children: [
       {
         path: LOGIN_PAGE.lastPath,
-      component: Login
+        component: Login
+      },
+      {
+        path: REGISTER_PAGE.lastPath,
+        component: Register
       }
     ],
     canActivateChild: [publicGuard]

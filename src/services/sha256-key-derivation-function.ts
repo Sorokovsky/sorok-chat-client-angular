@@ -12,7 +12,6 @@ export class Sha256KeyDerivationFunction {
     const info = new Uint8Array(0);
     const pkr: Uint8Array = await this.hmacSha256(salt, seed);
     const input = new Uint8Array(info.length + 1);
-    input.set(info)
     input[info.length] = 1;
     return await this.hmacSha256(pkr as BufferSource, input);
   }

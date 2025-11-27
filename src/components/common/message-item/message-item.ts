@@ -37,7 +37,6 @@ export class MessageItem {
     const message: Message = this.message();
     const key: string = await this.chatKey();
     try {
-      console.log(key);
       return this.cryptoService.decrypt(message.text, key);
     } catch {
       return "[Не вдалося розшифрувати]"

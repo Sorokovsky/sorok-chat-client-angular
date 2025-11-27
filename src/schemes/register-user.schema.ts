@@ -1,8 +1,7 @@
 import {z as zod} from "zod";
 import {MIN_PASSWORD_LENGTH} from '@/constants/validation.constants';
-import {BaseScheme} from '@/schemes/base.scheme';
 
-export const RegisterUserSchema = BaseScheme.extend({
+export const RegisterUserSchema = zod.object({
   email: zod.email({
     message: "Не корнктна електронна адреса."
   }),
