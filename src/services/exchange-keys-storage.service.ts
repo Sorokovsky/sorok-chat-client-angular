@@ -29,7 +29,22 @@ export class ExchangeKeysStorageService {
     return keys;
   }
 
-  public getEphemeralKeys(): DiffieHellmanKeysPair {
-    return this.diffieHellmanService.generateKeysPair();
+  public getEphemeralKeys(chatId: number): DiffieHellmanKeysPair {
+    const privateName: string = `ephemeral_public-${chatId}`;
+    const publicName: string = `ephemeral_public-${chatId}`;
+    const ephemeralPublicString: string | null = localStorage.getItem(privateName);
+    const ephemeralPrivateString: string | null = localStorage.getItem(publicName);
+    let keys: DiffieHellmanKeysPair;
+    if (ephemeralPublicString === null || ephemeralPrivateString === null) {
+      keys = this.diffieHellmanService.generateKeysPair();
+      localStorage.setItem(privateName, keys.privateKey.toString());
+      localStorage.setItem(publicName, keys.publicKey.toString());
+    } else {
+      keys = {
+        privateKey: BigInt(ephemeralPrivateString),
+        publicKey: BigInt(ephemeralPublicString),
+      };
+    }
+    return keys;
   }
 }
