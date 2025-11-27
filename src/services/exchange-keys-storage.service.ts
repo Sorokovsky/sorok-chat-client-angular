@@ -30,10 +30,10 @@ export class ExchangeKeysStorageService {
   }
 
   public getEphemeralKeys(chatId: number): DiffieHellmanKeysPair {
-    const privateName: string = `ephemeral_public-${chatId}`;
+    const privateName: string = `ephemeral_private-${chatId}`;
     const publicName: string = `ephemeral_public-${chatId}`;
-    const ephemeralPublicString: string | null = localStorage.getItem(privateName);
-    const ephemeralPrivateString: string | null = localStorage.getItem(publicName);
+    const ephemeralPublicString: string | null = localStorage.getItem(publicName);
+    const ephemeralPrivateString: string | null = localStorage.getItem(privateName);
     let keys: DiffieHellmanKeysPair;
     if (ephemeralPublicString === null || ephemeralPrivateString === null) {
       keys = this.diffieHellmanService.generateKeysPair();
