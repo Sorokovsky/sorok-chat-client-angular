@@ -37,6 +37,7 @@ export class MessageItem {
     const message: Message = this.message();
     const key: string = await this.chatKey();
     try {
+      console.log(key);
       return this.cryptoService.decrypt(message.text, key);
     } catch {
       return "[Не вдалося розшифрувати]"
@@ -49,9 +50,4 @@ export class MessageItem {
     const key: string = await this.chatKey();
     return this.cryptoService.isSigned(message.text, message.mac, key);
   });
-
-  private async getChatKey(): Promise<string> {
-    const chat: Chat = this.chat();
-    return await this.chatKeyStorageService.getChatKey(chat.staticPublicKey, chat.ephemeralPublicKey, chat.id);
-  }
 }
