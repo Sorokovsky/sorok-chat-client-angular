@@ -47,7 +47,7 @@ export class SendMessage {
   public async sendMessage(): Promise<void> {
     const data: unknown = this.messageForm.value;
     if (data && typeof data == "object" && "text" in data && typeof data.text === "string") {
-      const macSecret: string = await this.chatKeyStorageService.getChatKey(this.chat().staticPublicKey, this.chat().ephemeralPublicKey);
+      const macSecret: string = await this.chatKeyStorageService.getChatKey(this.chat().staticPublicKey, this.chat().ephemeralPublicKey, this.chat().id);
       const text: string = this.cryptoService.encrypt(data.text, macSecret)
       const mac: string = this.cryptoService.sign(text, macSecret);
       const newMessage: NewMessage = {text, mac};

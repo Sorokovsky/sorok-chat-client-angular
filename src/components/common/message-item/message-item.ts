@@ -1,4 +1,4 @@
-import {Component, input, type InputSignal} from '@angular/core';
+import {Component, computed, input, type InputSignal, Signal} from '@angular/core';
 import {Avatar} from "@/components/ui/avatar/avatar";
 import {formatDate} from '@/helpers/format-date.helper';
 import {type Message} from '@/schemes/message.schema';
@@ -28,17 +28,30 @@ export class MessageItem {
     this.chatKeyStorageService = chatKeyStorageService;
   }
 
-  protected async decryptMessage(message: Message): Promise<string> {
-    const key: string = await this.getChatKey();
-    return this.cryptoService.decrypt(message.text, key);
-  }
+  private chatKey: Signal<Promise<string>> = computed(async (): Promise<string> => {
+    const chat: Chat = this.chat();
+    return await this.chatKeyStorageService.getChatKey(chat.staticPublicKey, chat.ephemeralPublicKey, chat.id);
+  });
 
-  protected async isMessageNotChanged(message: Message): Promise<boolean> {
-    const key: string = await this.getChatKey();
+  public decryptedText: Signal<Promise<string>> = computed(async (): Promise<string> => {
+    const message: Message = this.message();
+    const key: string = await this.chatKey();
+    try {
+      return this.cryptoService.decrypt(message.text, key);
+    } catch {
+      return "[Не вдалося розшифрувати]"
+    }
+  });
+
+  public isValid: Signal<Promise<boolean>> = computed(async (): Promise<boolean> => {
+    const message: Message = this.message();
+    if (!message.mac) return false;
+    const key: string = await this.chatKey();
     return this.cryptoService.isSigned(message.text, message.mac, key);
-  }
+  });
 
   private async getChatKey(): Promise<string> {
-    return await this.chatKeyStorageService.getChatKey(this.chat().staticPublicKey, this.chat().ephemeralPublicKey);
+    const chat: Chat = this.chat();
+    return await this.chatKeyStorageService.getChatKey(chat.staticPublicKey, chat.ephemeralPublicKey, chat.id);
   }
 }

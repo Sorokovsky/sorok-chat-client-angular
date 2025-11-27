@@ -9,6 +9,7 @@ import {DiffieHellmanKeysPair} from '@/schemes/diffie-hellman-key-pairs.schema';
 export class ChatKeyStorageService {
   private readonly exchangeKeysStorageService: ExchangeKeysStorageService;
   private readonly tripleDiffieHellmanService: TripleDiffieHellmanService;
+  private readonly chatKeys: Map<string, string> = new Map<string, string>();
 
 
   constructor(
@@ -19,7 +20,9 @@ export class ChatKeyStorageService {
     this.tripleDiffieHellmanService = tripleDiffieHellmanService;
   }
 
-  public async getChatKey(chatStaticPublicKey: string, chatEphemeralPublicKey: string): Promise<string> {
+  public async getChatKey(chatStaticPublicKey: string, chatEphemeralPublicKey: string, chatId: number): Promise<string> {
+    const key: string | undefined = this.chatKeys.get(String(chatId));
+    if (key !== undefined) return key;
     const myStaticKeys: DiffieHellmanKeysPair = this.exchangeKeysStorageService.getStaticKeys();
     const myEphemeralKeys: DiffieHellmanKeysPair = this.exchangeKeysStorageService.getEphemeralKeys();
     const staticKeys: DiffieHellmanKeysPair = {

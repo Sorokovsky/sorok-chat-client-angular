@@ -2,7 +2,7 @@
   <app-avatar [user]="message().author"/>
   <div>
     <div>
-      <span>{{ decryptMessage(message()) | async }} {{ (isMessageNotChanged(message()) | async) ? "✔️" : "❌" }}</span>
+      <span>{{ decryptedText() | async }} {{ (isValid() | async) ? "✔️" : "❌" }}</span>
       <span>{{ formatDate(message().createdAt) }}</span>
       <span></span>
     </div>
