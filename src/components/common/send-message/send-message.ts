@@ -7,6 +7,8 @@ import {type User} from '@/schemes/user.schema';
 import {CryptoService} from '@/services/crypto.service';
 import {type NewMessage} from '@/schemes/new-message.schema';
 import {type SentMessage} from "@/schemes/sent-message.scheme";
+import {Chat} from '@/schemes/chat.schema';
+import {ChatKeyStorageService} from '@/services/chat-key-storage.service';
 
 @Component({
   selector: 'app-send-message',
@@ -21,30 +23,36 @@ import {type SentMessage} from "@/schemes/sent-message.scheme";
 })
 export class SendMessage {
   public currentUser: InputSignal<User> = input.required<User>();
-  public chatId: InputSignal<number> = input.required<number>();
+  public chat: InputSignal<Chat> = input.required<Chat>();
   public sentMessage: OutputEmitterRef<SentMessage> = output<SentMessage>()
   protected messageForm: FormGroup;
   protected textInput: TypedFormControl;
   private readonly cryptoService: CryptoService;
+  private readonly chatKeyStorageService: ChatKeyStorageService;
 
-  constructor(formBuilder: FormBuilder, cryptoService: CryptoService) {
+  constructor(
+    formBuilder: FormBuilder,
+    cryptoService: CryptoService,
+    chatKeyStorageService: ChatKeyStorageService,
+  ) {
     this.textInput = formBuilder.control('', [Validators.required]) as TypedFormControl;
     this.messageForm = formBuilder.group({
       text: this.textInput,
     })
     this.textInput.meta = {label: "Повідомлення"};
     this.cryptoService = cryptoService;
+    this.chatKeyStorageService = chatKeyStorageService;
   }
 
   public async sendMessage(): Promise<void> {
     const data: unknown = this.messageForm.value;
     if (data && typeof data == "object" && "text" in data && typeof data.text === "string") {
-      const macSecret: string = this.currentUser().macSecret!;
+      const macSecret: string = await this.chatKeyStorageService.getChatKey(this.chat().staticPublicKey, this.chat().ephemeralPublicKey);
       const text: string = this.cryptoService.encrypt(data.text, macSecret)
       const mac: string = this.cryptoService.sign(text, macSecret);
       const newMessage: NewMessage = {text, mac};
       this.messageForm.reset();
-      this.sentMessage.emit({chatId: this.chatId(), message: newMessage});
+      this.sentMessage.emit({chatId: this.chat().id, message: newMessage});
     }
   }
 }

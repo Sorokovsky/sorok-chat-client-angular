@@ -5,6 +5,6 @@
   <div>Виберіть чат для спілкування</div>
 } @else {
   <app-chat-heading [chat]="currentChat"/>
-  <app-message-list [messages]="currentChat.messages"/>
-  <app-send-message (sentMessage)="sendMessage($event)" [chatId]="currentChat.id" [currentUser]="currentUser"/>
+  <app-message-list [messages]="currentChat.messages" [chat]="currentChat"/>
+  <app-send-message (sentMessage)="sendMessage($event)" [chat]="currentChat" [currentUser]="currentUser"/>
 }
