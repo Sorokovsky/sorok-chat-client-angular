@@ -4,7 +4,8 @@
 @if (currentChat === undefined || currentUser === undefined) {
   <div>Виберіть чат для спілкування</div>
 } @else {
+  @let messagesByChat = getMessagesByChat(currentChat);
   <app-chat-heading [chat]="currentChat"/>
-  <app-message-list [messages]="currentChat.messages" [chat]="currentChat"/>
+  <app-message-list [messages]="messagesByChat" [chat]="currentChat"/>
   <app-send-message (sentMessage)="sendMessage($event)" [chat]="currentChat" [currentUser]="currentUser"/>
 }

@@ -20,8 +20,8 @@ export class ChatsService {
       .pipe(map((response: unknown): Chat[] => ChatSchema.array().parse(response)));
   }
 
-  public createChat(chat: NewChat): Observable<Chat> {
-    return this.httpClient.post<Chat>(CHATS_URL, chat)
+  public createChat(chat: NewChat, opponentEmail: string): Observable<Chat> {
+    return this.httpClient.post<Chat>(`${CHATS_URL}/${opponentEmail}`, chat)
       .pipe(map((response: unknown): Chat => ChatSchema.parse(response)));
   }
 }

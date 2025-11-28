@@ -1,7 +1,7 @@
 <div class="messages">
   <ul>
     @for (message of messages(); track message.id) {
-      <app-message-item [message]="message" [chat]="chat()"/>
+      <app-message-item [message]="message"/>
     }
   </ul>
 </div>

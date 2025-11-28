@@ -3,8 +3,6 @@ import {RegisterUserSchema} from '@/schemes/register-user.schema';
 
 export const UserSchema = RegisterUserSchema.omit({
   password: true
-}).extend({
-  macSecret: zod.string()
 });
 
 export type User = zod.infer<typeof UserSchema>;

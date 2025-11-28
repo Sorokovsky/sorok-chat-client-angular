@@ -9,11 +9,11 @@ import {FormsModule} from '@angular/forms';
 import {type User} from '@/schemes/user.schema';
 import {useProfile} from '@/hooks/profile.hook';
 import {MessagesService} from '@/services/messages.service';
-import {type ReceivedMessage} from '@/schemes/received-message.scheme';
 import {MessageList} from '@/components/common/message-list/message-list';
 import {SendMessage} from '@/components/common/send-message/send-message';
 import {type SentMessage} from '@/schemes/sent-message.scheme';
 import {ChatHeading} from '@/components/common/chat-heading/chat-heading';
+import {LocalMessage, LocalMessageScheme} from '@/schemes/local.message';
 
 @Component({
   selector: 'app-chat',
@@ -35,10 +35,9 @@ export class Chat implements OnInit {
   protected cryptoService: CryptoService;
   protected profile: CreateQueryResult<User> = useProfile();
 
-
-
   protected chat: WritableSignal<ChatType | undefined> = signal<ChatType | undefined>(undefined);
   private chats: CreateQueryResult<ChatType[]> = useChatsByMe();
+  protected messages: WritableSignal<LocalMessage[]> = signal<LocalMessage[]>([])
   private parameters: Signal<ParamMap | undefined>;
 
   constructor(activatedRoute: ActivatedRoute, cryptoService: CryptoService, messagesService: MessagesService) {
@@ -57,14 +56,18 @@ export class Chat implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.messagesService.connectIfPossible()
+    const messagesString: string = localStorage.getItem('messages') || '[]';
+    this.messages.set(LocalMessageScheme.array().parse(JSON.parse(messagesString)));
     this.messagesService.messageReceived$
-      .subscribe((received: ReceivedMessage | null): void => {
+      .subscribe((received: LocalMessage | null): void => {
         const chats: ChatType[] | undefined = this.chats.data()
         if (received === null || chats === undefined) return;
-        const chat: ChatType | undefined = chats.find((chat: ChatType): boolean => chat.id === received.chatId);
-        if (chat === undefined) return;
-        chat.messages.push(received.message);
+        this.messages.set([...this.messages(), received]);
       });
+  }
+
+  protected getMessagesByChat(chat: ChatType): LocalMessage[] {
+    return this.messages().filter(x => x.chatId == chat.id);
   }
 
   public async sendMessage(message: SentMessage): Promise<void> {

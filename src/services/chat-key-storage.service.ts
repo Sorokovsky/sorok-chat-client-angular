@@ -19,9 +19,18 @@ export class ChatKeyStorageService {
     this.tripleDiffieHellmanService = tripleDiffieHellmanService;
   }
 
-  public async getChatKey(chatStaticPublicKey: string, chatEphemeralPublicKey: string, chatId: number): Promise<string> {
+  public async getChatKey(chatId: number): Promise<string> {
+    const chatStaticPublicKey: string | null = localStorage.getItem(`$static-public-${chatId}`);
+    const chatEphemeralPublicKey: string | null = localStorage.getItem(`ephemeral-public-${chatId}`);
     const myStaticKeys: DiffieHellmanKeysPair = this.exchangeKeysStorageService.getStaticKeys();
     const myEphemeralKeys: DiffieHellmanKeysPair = this.exchangeKeysStorageService.getEphemeralKeys(chatId);
-    return await this.tripleDiffieHellmanService.generateSharedKey(myStaticKeys, myEphemeralKeys, BigInt(chatStaticPublicKey), BigInt(chatEphemeralPublicKey));
+    const staticPublicKey: string = chatStaticPublicKey ?? myStaticKeys.publicKey.toString();
+    const ephemeralPublicKey: string = chatEphemeralPublicKey ?? myEphemeralKeys.publicKey.toString();
+    return await this.tripleDiffieHellmanService.generateSharedKey(
+      myStaticKeys,
+      myEphemeralKeys,
+      BigInt(staticPublicKey),
+      BigInt(ephemeralPublicKey)
+    );
   }
 }
