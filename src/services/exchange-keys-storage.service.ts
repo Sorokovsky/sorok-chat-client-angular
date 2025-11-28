@@ -14,7 +14,7 @@ export class ExchangeKeysStorageService {
     this.diffieHellmanService = diffieHellmanService;
   }
 
-  public getStaticKeys(): DiffieHellmanKeysPair {
+  public getMyStaticKeys(): DiffieHellmanKeysPair {
     const publicStaticString: string | null = localStorage.getItem(this.staticPublicKeyName);
     const privateStaticString: string | null = localStorage.getItem(this.staticPrivateKeyName);
     let keys: DiffieHellmanKeysPair;
@@ -29,9 +29,9 @@ export class ExchangeKeysStorageService {
     return keys;
   }
 
-  public getEphemeralKeys(chatId: number): DiffieHellmanKeysPair {
-    const privateName: string = `ephemeral_private-${chatId}`;
-    const publicName: string = `ephemeral_public-${chatId}`;
+  public getMyEphemeralKeys(chatId: number): DiffieHellmanKeysPair {
+    const privateName: string = `ephemeral-private-my-${chatId}`;
+    const publicName: string = `ephemeral-public-my-${chatId}`;
     const ephemeralPublicString: string | null = localStorage.getItem(publicName);
     const ephemeralPrivateString: string | null = localStorage.getItem(privateName);
     let keys: DiffieHellmanKeysPair;

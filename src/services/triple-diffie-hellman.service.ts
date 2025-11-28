@@ -22,17 +22,15 @@ export class TripleDiffieHellmanService {
     const dh1 = this.dh.generateSharedSecret(myStatic.privateKey, otherEphemeralPub);
     const dh2 = this.dh.generateSharedSecret(myEphemeral.privateKey, otherStaticPub);
     const dh3 = this.dh.generateSharedSecret(myEphemeral.privateKey, otherEphemeralPub);
+    const seed = [dh1, dh2, dh3]
+      .map(secret => this.bigIntToBytes(secret))
+      .sort((a, b) => this.compareUint8Array(a, b))
+      .reduce((acc, arr) => (acc.set(arr, acc.byteLength - 32), acc), new Uint8Array(96));
 
-    const seed = new Uint8Array(96);
-    seed.set(this.bigIntToBytes(dh1), 0);
-    seed.set(this.bigIntToBytes(dh2), 32);
-    seed.set(this.bigIntToBytes(dh3), 64);
-
-    const key = await this.kdf.deriveSecrets(seed, 'TripleDH_Session_v1');
+    const key = await this.kdf.deriveSecrets(seed as BufferSource, 'TripleDH_Session_v1');
     return this.uint8ToBase64(key);
   }
 
-  // ПРАВИЛЬНИЙ big-endian запис
   private bigIntToBytes(n: bigint): Uint8Array {
     const bytes = new Uint8Array(32);
     for (let i = 0; i < 32; i++) {
@@ -42,10 +40,17 @@ export class TripleDiffieHellmanService {
     return bytes;
   }
 
-  // Безпечний Base64
   private uint8ToBase64(arr: Uint8Array): string {
     let binary = '';
     for (const byte of arr) binary += String.fromCharCode(byte);
     return btoa(binary);
+  }
+
+  private compareUint8Array(a: Uint8Array, b: Uint8Array): number {
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] < b[i]) return -1;
+      if (a[i] > b[i]) return +1;
+    }
+    return 0;
   }
 }

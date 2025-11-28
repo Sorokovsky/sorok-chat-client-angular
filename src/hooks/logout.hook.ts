@@ -19,6 +19,7 @@ export function useLogout(): CreateMutationResult<unknown, Error, void, void> {
     },
     async onSettled(): Promise<void> {
       await queryClient.refetchQueries({queryKey: [PROFILE_KEY], exact: false});
+      localStorage.clear();
     }
   }));
 }
