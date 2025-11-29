@@ -4,14 +4,21 @@ import {type CreateQueryOptions, type CreateQueryResult, injectQuery} from '@tan
 import {type Chat} from '@/schemes/chat.schema';
 import {GET_CHATS_KEY} from '@/constants/queries.constants';
 import {lastValueFrom} from 'rxjs';
+import {MessagesService} from '@/services/messages.service';
 
 export function useChatsByMe(): CreateQueryResult<Chat[]> {
   const chatsService: ChatsService = inject(ChatsService);
+  const messagesService: MessagesService = inject(MessagesService);
 
   return injectQuery((): CreateQueryOptions<Chat[]> => ({
     queryKey: [GET_CHATS_KEY],
     queryFn: async (): Promise<Chat[]> => {
-      return await lastValueFrom(chatsService.getByMe());
+      const chats = await lastValueFrom(chatsService.getByMe());
+      await messagesService.connectIfPossible();
+      chats.forEach((chat: Chat) => {
+        messagesService.joinToChat(chat.id);
+      })
+      return chats;
     },
   }));
 }

@@ -13,6 +13,7 @@ import {type CreateQueryResult} from '@tanstack/angular-query-experimental';
 import {type User} from '@/schemes/user.schema';
 import {useProfile} from '@/hooks/profile.hook';
 import {ExchangeKeysStorageService} from '@/services/exchange-keys-storage.service';
+import {DiffieHellmanKeysPair} from '@/schemes/diffie-hellman-key-pairs.schema';
 
 @Injectable({
   providedIn: 'root',
@@ -144,8 +145,8 @@ export class MessagesService implements OnDestroy {
   }
 
   private handshake(userId: number, chatId: number): void {
-    const staticKeys = this.exchangeKeysStorageService.getMyStaticKeys();
-    const ephemeralKeys = this.exchangeKeysStorageService.getMyEphemeralKeys(chatId);
+    const staticKeys: DiffieHellmanKeysPair = this.exchangeKeysStorageService.getMyStaticKeys();
+    const ephemeralKeys: DiffieHellmanKeysPair = this.exchangeKeysStorageService.getMyEphemeralKeys(chatId);
     this.hubConnection?.invoke(
       ChatsActions.SEND_EXCHANGE,
       staticKeys.publicKey.toString(),
