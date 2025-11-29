@@ -126,10 +126,10 @@ export class MessagesService implements OnDestroy {
         this.base64ToUint8Array(ephemeralSigning) as ArrayBuffer,
         user.publicRsaKey
       );
+      const currentUserId: number = this.profile.data()!.id;
       if (!isStaticCorrect || !isEphemeralCorrect) {
-        await this.handshake(user.id, chatId);
+        await this.handshake(currentUserId, chatId);
       } else {
-        const currentUserId: number | undefined = this.profile.data()?.id;
         if (currentUserId !== user.id) {
           localStorage.setItem(`static-public-chat-${chatId}`, staticPublicKey);
           localStorage.setItem(`ephemeral-public-chat-${chatId}`, ephemeralPublicKey);
