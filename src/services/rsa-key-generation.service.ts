@@ -31,7 +31,7 @@ export class RsaKeyGenerationService {
     }
   }
 
-  async importPrivateKey(pem: string): Promise<CryptoKey> {
+  public async importPrivateKey(pem: string): Promise<CryptoKey> {
     const der: ArrayBuffer = this.pemToArrayBuffer(pem);
     return await crypto.subtle.importKey(
       'pkcs8',
@@ -42,7 +42,7 @@ export class RsaKeyGenerationService {
     );
   }
 
-  async importPublicKey(pem: string): Promise<CryptoKey> {
+  public async importPublicKey(pem: string): Promise<CryptoKey> {
     const der: ArrayBuffer = this.pemToArrayBuffer(pem);
     return await crypto.subtle.importKey(
       'spki',
@@ -70,15 +70,15 @@ export class RsaKeyGenerationService {
   }
 
   private pemToArrayBuffer(pem: string): ArrayBuffer {
-    const b64 = pem
-      .replace(/-----BEGIN[^-]*-----/g, '')
-      .replace(/-----END[^-]*-----/g, '')
-      .replace(/\s+/g, '');
-    const binary = atob(b64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
-    }
-    return bytes.buffer;
+    const base64 = pem
+      .replace(this.BEGIN_PUBLIC_KEY_PREFIX, "")
+      .replace(this.END_PUBLIC_KEY_SUFFIX, "")
+      .replace(this.BEGIN_PRIVATE_KEY_PREFIX, "")
+      .replace(this.END_PRIVATE_KEY_SUFFIX, "")
+      .replaceAll("\n", "");
+
+    const padded = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
+    const binary = atob(padded);
+    return Uint8Array.from(binary, c => c.charCodeAt(0)).buffer;
   }
 }

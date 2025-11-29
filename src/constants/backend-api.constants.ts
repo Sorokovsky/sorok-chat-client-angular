@@ -6,4 +6,5 @@ export const LOGOUT_URL: string = `${AUTHENTICATION_URL}/logout`;
 export const PROFILE_URL: string = `${AUTHENTICATION_URL}/get-me`;
 export const CHATS_URL: string = `${SERVER_URL}/chats`;
 export const CHATS_BY_ME_URL: string = `${CHATS_URL}/by-me`;
+export const SET_PUBLIC_RSA_KEY_URL: string = `${AUTHENTICATION_URL}/set-rsa-key`;
 export const MESSAGES_HUB: string = `/messages`;

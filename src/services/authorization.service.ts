@@ -1,6 +1,12 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {LOGIN_URL, LOGOUT_URL, PROFILE_URL, REGISTRATION_URL} from '@/constants/backend-api.constants';
+import {
+  LOGIN_URL,
+  LOGOUT_URL,
+  PROFILE_URL,
+  REGISTRATION_URL,
+  SET_PUBLIC_RSA_KEY_URL
+} from '@/constants/backend-api.constants';
 import {type User, UserSchema} from '@/schemes/user.schema';
 import {map, type Observable} from 'rxjs';
 import {type RegisterUser} from '@/schemes/register-user.schema';
@@ -31,5 +37,9 @@ export class AuthorizationService {
   public getProfile(): Observable<User> {
     return this.httpClient.get<User>(PROFILE_URL)
       .pipe(map((response: unknown): User => UserSchema.parse(response)));
+  }
+
+  public setPublicRsaKey(publicRsaKey: string): Observable<User> {
+    return this.httpClient.put<User>(SET_PUBLIC_RSA_KEY_URL, {publicRsaKey})
   }
 }

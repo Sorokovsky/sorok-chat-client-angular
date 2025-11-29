@@ -14,6 +14,9 @@ import {type User} from '@/schemes/user.schema';
 import {useProfile} from '@/hooks/profile.hook';
 import {ExchangeKeysStorageService} from '@/services/exchange-keys-storage.service';
 import {DiffieHellmanKeysPair} from '@/schemes/diffie-hellman-key-pairs.schema';
+import {RsaKeyPair} from '@/schemes/rsa-key-pair.scheme';
+import {RsaKeysStorageService} from '@/services/rsa-keys-storage.service';
+import {RsaSigningService} from '@/services/rsa-signing.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +27,8 @@ export class MessagesService implements OnDestroy {
   private readonly chatKeyExchangeService: ChatKeyStorageService;
   private readonly exchangeKeysStorageService: ExchangeKeysStorageService;
   private readonly cryptoService: CryptoService;
+  private readonly rsaKeyStorageService: RsaKeysStorageService;
+  private readonly rsaSigningService: RsaSigningService;
   private profile: CreateQueryResult<User> = useProfile();
 
   private hubConnection: HubConnection | null = null;
@@ -39,12 +44,16 @@ export class MessagesService implements OnDestroy {
     chatKeyExchangeService: ChatKeyStorageService,
     cryptoService: CryptoService,
     exchangeKeysStorageService: ExchangeKeysStorageService,
+    rsaKeyStorageService: RsaKeysStorageService,
+    rsaSigningService: RsaSigningService,
   ) {
     this.accessTokenService = accessTokenService;
     this.ngZone = ngZone;
     this.chatKeyExchangeService = chatKeyExchangeService;
     this.cryptoService = cryptoService;
     this.exchangeKeysStorageService = exchangeKeysStorageService;
+    this.rsaKeyStorageService = rsaKeyStorageService;
+    this.rsaSigningService = rsaSigningService;
   }
 
   public async ngOnDestroy(): Promise<void> {
@@ -99,20 +108,36 @@ export class MessagesService implements OnDestroy {
       console.error("Помилка підключення", error);
     }
 
-    this.hubConnection.on(ChatsActions.RECEIVE_EXCHANGE, (
+    this.hubConnection.on(ChatsActions.RECEIVE_EXCHANGE, async (
       staticPublicKey: string,
+      staticSigning: string,
       ephemeralPublicKey: string,
-      userId: number,
+      ephemeralSigning: string,
+      user: User,
       chatId: number
-    ): void => {
-      const currentUserId: number | undefined = this.profile.data()?.id;
-      if (currentUserId !== userId) {
-        localStorage.setItem(`static-public-chat-${chatId}`, staticPublicKey);
-        localStorage.setItem(`ephemeral-public-chat-${chatId}`, ephemeralPublicKey);
+    ): Promise<void> => {
+      const isStaticCorrect: boolean = await this.rsaSigningService.verify(
+        this.bigIntToBufferSource(BigInt(staticPublicKey)),
+        this.base64ToUint8Array(staticSigning) as ArrayBuffer,
+        user.publicRsaKey
+      );
+      const isEphemeralCorrect: boolean = await this.rsaSigningService.verify(
+        this.bigIntToBufferSource(BigInt(ephemeralPublicKey)),
+        this.base64ToUint8Array(ephemeralSigning) as ArrayBuffer,
+        user.publicRsaKey
+      );
+      if (!isStaticCorrect || !isEphemeralCorrect) {
+        await this.handshake(user.id, chatId);
+      } else {
+        const currentUserId: number | undefined = this.profile.data()?.id;
+        if (currentUserId !== user.id) {
+          localStorage.setItem(`static-public-chat-${chatId}`, staticPublicKey);
+          localStorage.setItem(`ephemeral-public-chat-${chatId}`, ephemeralPublicKey);
+        }
       }
 
     });
-    this.hubConnection.on(ChatsActions.CONNECTED, (chatId: number, userId: number): void => {
+    this.hubConnection.on(ChatsActions.CONNECTED, (chatId: number, user: User): void => {
       const id = this.profile.data()!.id;
       this.handshake(id, chatId);
     });
@@ -144,15 +169,46 @@ export class MessagesService implements OnDestroy {
     });
   }
 
-  private handshake(userId: number, chatId: number): void {
+  private async handshake(userId: number, chatId: number): Promise<void> {
     const staticKeys: DiffieHellmanKeysPair = this.exchangeKeysStorageService.getMyStaticKeys();
     const ephemeralKeys: DiffieHellmanKeysPair = this.exchangeKeysStorageService.getMyEphemeralKeys(chatId);
+    const rsaKeys: RsaKeyPair = await this.rsaKeyStorageService.getKeyPair();
+    const staticSigning: string = await this.sign(staticKeys.publicKey, rsaKeys.privateKey);
+    const ephemeralSigning: string = await this.sign(ephemeralKeys.publicKey, rsaKeys.privateKey);
     this.hubConnection?.invoke(
       ChatsActions.SEND_EXCHANGE,
       staticKeys.publicKey.toString(),
+      staticSigning,
       ephemeralKeys.publicKey.toString(),
+      ephemeralSigning,
       chatId,
       userId
     );
+  }
+
+  private uint8ToBase64(uint8Array: Uint8Array): string {
+    return btoa(String.fromCharCode(...uint8Array));
+  }
+
+  private async sign(key: bigint, privateRsa: string): Promise<string> {
+    const signed: ArrayBuffer = await this.rsaSigningService.sign(this.bigIntToBufferSource(key), privateRsa);
+    return this.uint8ToBase64(new Uint8Array(signed));
+  }
+
+  private bigIntToBufferSource(value: bigint): BufferSource {
+    let hex = value.toString(16);
+    if (hex.length % 2) hex = '0' + hex;
+
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+    }
+
+    const firstNonZero = bytes.findIndex(b => b !== 0);
+    return firstNonZero === -1 ? new Uint8Array([0]) : bytes.subarray(firstNonZero);
+  }
+
+  private base64ToUint8Array(base64: string): BufferSource {
+    return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
   }
 }

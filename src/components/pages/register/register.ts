@@ -6,6 +6,8 @@ import {MIN_PASSWORD_LENGTH} from '@/constants/validation.constants';
 import {Form} from '@/components/ui/form/form';
 import {type RegisterUser, RegisterUserSchema} from '@/schemes/register-user.schema';
 import {useRegistration} from '@/hooks/registration.hook';
+import {RsaKeysStorageService} from '@/services/rsa-keys-storage.service';
+import {RsaKeyPair} from '@/schemes/rsa-key-pair.scheme';
 
 @Component({
   selector: 'app-register',
@@ -21,8 +23,11 @@ export class Register {
   protected title: string = "Реєстрація";
   protected submitText: string = "Зареєструватися";
   private registerMutation: CreateMutationResult<User, Error, RegisterUser, void> = useRegistration();
+  private readonly rsaKeyPairStorage: RsaKeysStorageService;
 
-  constructor(formBuilder: FormBuilder) {
+
+  constructor(formBuilder: FormBuilder, rsaKeyPairStorage: RsaKeysStorageService) {
+    this.rsaKeyPairStorage = rsaKeyPairStorage;
     const email: FormControl<string | null> = formBuilder.control('', {
       validators: [Validators.required, Validators.email],
     });
@@ -57,9 +62,10 @@ export class Register {
     })
   }
 
-  public register(): void {
+  public async register(): Promise<void> {
     const data: unknown = this.registerForm.value;
-    const registerDto: RegisterUser = RegisterUserSchema.parse(data);
-    this.registerMutation.mutate(registerDto);
+    const registerDto: Omit<RegisterUser, "publicRsaKey"> = RegisterUserSchema.omit({publicRsaKey: true}).parse(data);
+    const keys: RsaKeyPair = await this.rsaKeyPairStorage.getKeyPair();
+    this.registerMutation.mutate({...registerDto, publicRsaKey: keys.publicKey});
   }
 }

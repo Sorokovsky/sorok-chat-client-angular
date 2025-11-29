@@ -17,6 +17,7 @@ export const RegisterUserSchema = zod.object({
   middleName: zod.string({
     message: "Побатькові має бути рядком"
   }),
+  publicRsaKey: zod.string()
 });
 
 export type RegisterUser = zod.infer<typeof RegisterUserSchema>;
