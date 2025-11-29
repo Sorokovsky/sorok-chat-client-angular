@@ -32,7 +32,7 @@ export class RsaKeyGenerationService {
   }
 
   async importPrivateKey(pem: string): Promise<CryptoKey> {
-    const der = this.pemToArrayBuffer(pem);
+    const der: ArrayBuffer = this.pemToArrayBuffer(pem);
     return await crypto.subtle.importKey(
       'pkcs8',
       der,
@@ -43,7 +43,7 @@ export class RsaKeyGenerationService {
   }
 
   async importPublicKey(pem: string): Promise<CryptoKey> {
-    const der = this.pemToArrayBuffer(pem);
+    const der: ArrayBuffer = this.pemToArrayBuffer(pem);
     return await crypto.subtle.importKey(
       'spki',
       der,
@@ -54,18 +54,18 @@ export class RsaKeyGenerationService {
   }
 
   private async exportPrivateKey(key: CryptoKey): Promise<string> {
-    const exported = await crypto.subtle.exportKey('pkcs8', key);
+    const exported: ArrayBuffer = await crypto.subtle.exportKey('pkcs8', key);
     return this.arrayBufferToPem(exported, this.BEGIN_PRIVATE_KEY_PREFIX, this.END_PRIVATE_KEY_SUFFIX);
   }
 
   private async exportPublicKey(key: CryptoKey): Promise<string> {
-    const exported = await crypto.subtle.exportKey('spki', key);
+    const exported: ArrayBuffer = await crypto.subtle.exportKey('spki', key);
     return this.arrayBufferToPem(exported, this.BEGIN_PUBLIC_KEY_PREFIX, this.END_PUBLIC_KEY_SUFFIX);
   }
 
   private arrayBufferToPem(buffer: ArrayBuffer, header: string, footer: string): string {
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
-    const wrapped = base64.match(/.{1,64}/g)!.join('\n');
+    const base64: string = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+    const wrapped: string = base64.match(/.{1,64}/g)!.join('\n');
     return `${header}\n${wrapped}\n${footer}`;
   }
 
