@@ -110,20 +110,20 @@ export class MessagesService implements OnDestroy {
 
     this.hubConnection.on(ChatsActions.RECEIVE_EXCHANGE, async (
       staticPublicKey: string,
-      staticSigning: string,
+      signingStatic: string,
       ephemeralPublicKey: string,
-      ephemeralSigning: string,
+      signingEphemeral: string,
       user: User,
       chatId: number
     ): Promise<void> => {
       const isStaticCorrect: boolean = await this.rsaSigningService.verify(
         this.bigIntToBufferSource(BigInt(staticPublicKey)),
-        this.base64ToUint8Array(staticSigning) as ArrayBuffer,
+        this.base64ToUint8Array(signingStatic) as ArrayBuffer,
         user.publicRsaKey
       );
       const isEphemeralCorrect: boolean = await this.rsaSigningService.verify(
         this.bigIntToBufferSource(BigInt(ephemeralPublicKey)),
-        this.base64ToUint8Array(ephemeralSigning) as ArrayBuffer,
+        this.base64ToUint8Array(signingEphemeral) as ArrayBuffer,
         user.publicRsaKey
       );
       const currentUserId: number = this.profile.data()!.id;
